@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:main"
         mc:Ignorable="d"
         xmlns:views="clr-namespace:main.Views"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Rento - Tìm phòng trọ" Height="450" Width="800"
         Style="{StaticResource MaterialDesignWindow}">
 
     <Grid>

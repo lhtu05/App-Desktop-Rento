@@ -1,6 +1,7 @@
 ﻿using main.Models;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace main.Views
 {
@@ -12,6 +13,16 @@ namespace main.Views
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+        }
+        private void NavigateToRegisterPage(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow?.NavigateToRegisterPage();
+        }
+        private void NavigateToLoginPage(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow?.NavigateToLoginPage();
         }
 
     }
