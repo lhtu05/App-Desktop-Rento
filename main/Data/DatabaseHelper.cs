@@ -1,6 +1,7 @@
 ﻿using main.Models;
 using System;
-using System.Data.SqlClient;
+using System.Data;
+using Microsoft.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace main.Data
     {
         private string connectionString = @"Data Source=.;Initial Catalog=RentalPlatform;Integrated Security=True";
 
+        public static string ConnectionString = "Server=.;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         public string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -111,5 +113,36 @@ namespace main.Data
                 return count > 0;
             }
         }
+
+
+        private readonly List<Property> _properties = new();
+
+        public IReadOnlyList<Property> GetProperties() => _properties.AsReadOnly();
+
+        public Property InsertProperty(Property property)
+        {
+            property.ID = _properties.Count + 1;
+            _properties.Add(property);
+            return property;
+        }
+
+
+        private readonly string _connectionString;
+
+        public DatabaseHelper(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public IDbConnection Connection
+        {
+            get
+            {
+                var conn = new SqlConnection(_connectionString);
+                conn.Open();
+                return conn;
+            }
+        }
+
     }
 }
