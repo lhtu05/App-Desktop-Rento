@@ -1,6 +1,7 @@
 ﻿using main.Models;
 using System;
-using System.Data.SqlClient;
+using System.Data;
+using Microsoft.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace main.Data
     {
         private string connectionString = @"Data Source=.;Initial Catalog=RentalPlatform;Integrated Security=True";
 
+        public static string ConnectionString = ".\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         public string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -41,14 +43,10 @@ namespace main.Data
                 {
                     user = new User
                     {
-                        UserID = (int)reader["UserID"],
+                        ID = (int)reader["UserID"],
                         Username = reader["Username"].ToString(),
                         Email = reader["Email"].ToString(),
                         FullName = reader["FullName"].ToString(),
-                        PhoneNumber = reader["PhoneNumber"]?.ToString(),
-                        UserType = reader["UserType"].ToString(),
-                        CreatedDate = (DateTime)reader["CreatedDate"],
-                        IsActive = (bool)reader["IsActive"]
                     };
                 }
             }
@@ -70,8 +68,6 @@ namespace main.Data
                     cmd.Parameters.AddWithValue("@PasswordHash", HashPassword(password));
                     cmd.Parameters.AddWithValue("@Email", user.Email);
                     cmd.Parameters.AddWithValue("@FullName", user.FullName);
-                    cmd.Parameters.AddWithValue("@PhoneNumber", user.PhoneNumber ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@UserType", user.UserType);
 
                     conn.Open();
                     int result = cmd.ExecuteNonQuery();
@@ -111,5 +107,36 @@ namespace main.Data
                 return count > 0;
             }
         }
+
+
+        //private readonly List<Property> _properties = new();
+
+        //public IReadOnlyList<Property> GetProperties() => _properties.AsReadOnly();
+
+        //public Property InsertProperty(Property property)
+        //{
+        //    property.ID = _properties.Count + 1;
+        //    _properties.Add(property);
+        //    return property;
+        //}
+
+
+        private readonly string _connectionString;
+
+        public DatabaseHelper(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public IDbConnection Connection
+        {
+            get
+            {
+                var conn = new SqlConnection(_connectionString);
+                conn.Open();
+                return conn;
+            }
+        }
+
     }
 }

@@ -54,8 +54,8 @@
         <!-- User Type -->
         <Label Grid.Row="7" Grid.Column="0" Content="Loại tài khoản:" Margin="0,0,10,10"/>
         <ComboBox Grid.Row="7" Grid.Column="1" Name="cmbUserType" Margin="0,0,0,10" Height="25">
-            <ComboBoxItem Content="Người thuê (Tenant)" IsSelected="True"/>
-            <ComboBoxItem Content="Chủ nhà (Landlord)"/>
+            <ComboBoxItem Content="Người thuê (Renter)" IsSelected="True"/>
+            <ComboBoxItem Content="Chủ nhà (Host)"/>
         </ComboBox>
 
         <!-- Buttons -->

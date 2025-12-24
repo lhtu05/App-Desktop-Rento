@@ -9,17 +9,17 @@ namespace main.Views
         private User _currentUser;
         private MainWindow _mainWindow;
 
-        public UserMainPage(User user, MainWindow mainWindow)
+        public UserMainPage(User User, MainWindow mainWindow)
         {
             InitializeComponent();
-            _currentUser = user;
+            _currentUser = User;
             _mainWindow = mainWindow;
             UpdateWelcomeMessage();
         }
 
         private void UpdateWelcomeMessage()
         {
-            txtWelcome.Text = $"Xin chào, {_currentUser.FullName} ({_currentUser.UserType})";
+            //txtWelcome.Text = $"Xin chào, {_currentUser.FullName} ({_currentUser.UserType})";
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)

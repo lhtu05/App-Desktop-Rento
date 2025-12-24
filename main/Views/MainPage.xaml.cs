@@ -19,7 +19,7 @@ namespace main.Views
             e.Handled = true;
             _mainWindow?.NavigateToRegisterPage();
         }
-        private void NavigateToLoginPage(object sender, MouseButtonEventArgs e)
+        private void NavigateToLoginPage(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
             _mainWindow?.NavigateToLoginPage();

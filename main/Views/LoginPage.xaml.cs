@@ -31,14 +31,14 @@ namespace main.Views
 
             try
             {
-                User user = _dbHelper.Login(username, password);
-                if (user != null)
+                User User = _dbHelper.Login(username, password);
+                if (User != null)
                 {
-                    MessageBox.Show($"Đăng nhập thành công! Chào mừng {user.FullName}",
+                    MessageBox.Show($"Đăng nhập thành công! Chào mừng {User.FullName}",
                         "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     // Điều hướng đến trang chính
-                    _mainWindow.NavigateToUserMainPage(user);
+                    _mainWindow.NavigateToUserMainPage(User);
                 }
                 else
                 {

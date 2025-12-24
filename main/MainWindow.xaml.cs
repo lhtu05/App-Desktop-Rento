@@ -13,7 +13,7 @@ namespace main
         public MainWindow()
         {
             InitializeComponent();
-            dbHelper = new DatabaseHelper();
+            dbHelper = new DatabaseHelper("Server=.\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;");
 
             // Load trang chính đầu tiên
             NavigateToMainPage();
@@ -41,9 +41,9 @@ namespace main
         }
 
         // Phương thức điều hướng đến trang chính sau khi đăng nhập thành công
-        public void NavigateToUserMainPage(User user)
+        public void NavigateToUserMainPage(User User)
         {
-            var userMainPage = new UserMainPage(user, this);
+            var userMainPage = new UserMainPage(User, this);
             MainFrame.Navigate(userMainPage);
         }
     }
