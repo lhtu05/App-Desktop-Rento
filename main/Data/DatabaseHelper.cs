@@ -28,7 +28,7 @@ namespace main.Data
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = @"SELECT UserID, Username, Email, FullName, PhoneNumber, UserType, CreatedDate, IsActive 
+                string query = @"SELECT ID, Username, Email, FullName, PhoneNumber, UserType, CreatedDate, IsActive 
                                FROM Users 
                                WHERE Username = @Username AND PasswordHash = @PasswordHash AND IsActive = 1";
 
@@ -43,8 +43,9 @@ namespace main.Data
                 {
                     user = new User
                     {
-                        ID = (int)reader["UserID"],
+                        ID = (int)reader["ID"],
                         Username = reader["Username"].ToString(),
+                        PasswordHash = reader["PasswordHash"].ToString(),
                         Email = reader["Email"].ToString(),
                         FullName = reader["FullName"].ToString(),
                     };

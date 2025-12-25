@@ -68,18 +68,18 @@ namespace main.Views
                     PasswordHash = txtPassword.Password,   // sau này đổi sang hash
                 };
 
-                //if (_dbHelper.Register(newUser, txtPassword.Password))
-                //{
-                //    MessageBox.Show("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.",
-                //        "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                //    // Quay lại trang đăng nhập
-                //    _mainWindow.NavigateToLoginPage();
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Đăng ký thất bại!", "Lỗi",
-                //        MessageBoxButton.OK, MessageBoxImage.Error);
-                //}
+                if (_dbHelper.Register(newUser, txtPassword.Password))
+                {
+                    MessageBox.Show("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.",
+                        "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Quay lại trang đăng nhập
+                    _mainWindow.NavigateToLoginPage();
+                }
+                else
+                {
+                    MessageBox.Show("Đăng ký thất bại!", "Lỗi",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (System.Exception ex)
             {
