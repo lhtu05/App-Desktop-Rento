@@ -31,7 +31,7 @@
         <Label Grid.Row="1" Grid.Column="0" Content="Họ và tên:" Margin="0,0,10,10"/>
         <TextBox Grid.Row="1" Grid.Column="1" Name="txtFullName" Margin="0,0,0,10" Height="25"/>
 
-        <!-- Username -->
+        <!-- UserName -->
         <Label Grid.Row="2" Grid.Column="0" Content="Tên đăng nhập:" Margin="0,0,10,10"/>
         <TextBox Grid.Row="2" Grid.Column="1" Name="txtUsername" Margin="0,0,0,10" Height="25"/>
 
@@ -39,7 +39,7 @@
         <Label Grid.Row="3" Grid.Column="0" Content="Email:" Margin="0,0,10,10"/>
         <TextBox Grid.Row="3" Grid.Column="1" Name="txtEmail" Margin="0,0,0,10" Height="25"/>
 
-        <!-- Phone -->
+        <!-- PhoneNumber -->
         <Label Grid.Row="4" Grid.Column="0" Content="Số điện thoại:" Margin="0,0,10,10"/>
         <TextBox Grid.Row="4" Grid.Column="1" Name="txtPhone" Margin="0,0,0,10" Height="25"/>
 

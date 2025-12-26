@@ -19,10 +19,10 @@ namespace main.Views
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            string username = txtUsername.Text.Trim();
+            string UserName = txtUsername.Text.Trim();
             string password = txtPassword.Password;
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -31,7 +31,7 @@ namespace main.Views
 
             try
             {
-                User User = _dbHelper.Login(username, password);
+                User User = _dbHelper.Login(UserName, password);
                 if (User != null)
                 {
                     MessageBox.Show($"Đăng nhập thành công! Chào mừng {User.FullName}",

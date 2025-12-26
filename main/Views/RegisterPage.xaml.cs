@@ -19,15 +19,15 @@ namespace main.Views
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtFullName.Text) ||
-                string.IsNullOrEmpty(txtUsername.Text) ||
-                string.IsNullOrEmpty(txtEmail.Text) ||
-                string.IsNullOrEmpty(txtPassword.Password))
-            {
-                MessageBox.Show("Vui lòng điền đầy đủ thông tin bắt buộc!", "Thông báo",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            //if (string.IsNullOrEmpty(txtFullName.Text) ||
+            //    string.IsNullOrEmpty(txtUsername.Text) ||
+            //    string.IsNullOrEmpty(txtEmail.Text) ||
+            //    string.IsNullOrEmpty(txtPassword.Password))
+            //{
+            //    MessageBox.Show("Vui lòng điền đầy đủ thông tin bắt buộc!", "Thông báo",
+            //        MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    return;
+            //}
 
             if (txtPassword.Password != txtConfirmPassword.Password)
             {
@@ -36,12 +36,12 @@ namespace main.Views
                 return;
             }
 
-            if (txtPassword.Password.Length < 6)
-            {
-                MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự!", "Lỗi",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            //if (txtPassword.Password.Length < 6)
+            //{
+            //    MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự!", "Lỗi",
+            //        MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
 
             try
             {
@@ -62,10 +62,11 @@ namespace main.Views
                 User newUser = new User
                 {
                     FullName = txtFullName.Text,
-                    Username = txtUsername.Text,
+                    UserName = txtUsername.Text,
                     Email = txtEmail.Text,
-                    Phone = txtPhone.Text,
+                    PhoneNumber = txtPhone.Text,
                     PasswordHash = txtPassword.Password,   // sau này đổi sang hash
+                    UserType = cmbUserType.Text,
                 };
 
                 if (_dbHelper.Register(newUser, txtPassword.Password))
@@ -88,10 +89,8 @@ namespace main.Views
             }
             using (var conn = _dbHelper.Connection)
             {
-                string sql = @"
-                INSERT INTO Property (HostID, WardID, Title, Address, Price, Description, Latitude, Longitude, Status, CreatedAt)
-                VALUES (@HostID, @WardID, @Title, @Address, @Price, @Description,@Latitude,@Longitude, 'AVAILABLE', GETDATE());
-                SELECT CAST(SCOPE_IDENTITY() as int);";
+                string sql = @"INSERT INTO Users (UserName, PasswordHash, Email, FullName, PhoneNumber, UserType) 
+                                   VALUES (@UserName, @PasswordHash, @Email, @FullName, @PhoneNumber, @UserType)";
 
                 //int newPropertyId = conn.QuerySingle<int>(sql, room);
 

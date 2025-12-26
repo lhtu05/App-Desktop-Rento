@@ -19,7 +19,7 @@
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Đăng nhập" 
                    FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-        <!-- Username -->
+        <!-- UserName -->
         <Label Grid.Row="1" Grid.Column="0" Content="Tên đăng nhập:" Margin="0,0,10,10"/>
         <TextBox Grid.Row="1" Grid.Column="1" Name="txtUsername" Margin="0,0,0,10" Height="25"/>
 

@@ -9,9 +9,9 @@ namespace main.Data
 {
     public class DatabaseHelper
     {
-        private string connectionString = @"Data Source=.;Initial Catalog=RentalPlatform;Integrated Security=True";
+        //private string connectionString = @"Data Source=DESKTOP-4OM7515\\SQLEXPRESS;Initial Catalog=RentalPlatform;Integrated Security=True";
 
-        public static string ConnectionString = ".\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        public static string connectionString = "Server=DESKTOP-4OM7515\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         public string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -21,19 +21,19 @@ namespace main.Data
             }
         }
 
-        public User Login(string username, string password)
+        public User Login(string UserName, string password)
         {
             User user = null;
             string hashedPassword = HashPassword(password);
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = @"SELECT ID, Username, Email, FullName, PhoneNumber, UserType, CreatedDate, IsActive 
+                string query = @"SELECT ID, UserName, Email, FullName, PhoneNumber, UserType, CreatedDate, IsActive 
                                FROM Users 
-                               WHERE Username = @Username AND PasswordHash = @PasswordHash AND IsActive = 1";
+                               WHERE UserName = @UserName AND PasswordHash = @PasswordHash AND IsActive = 1";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Username", username);
+                cmd.Parameters.AddWithValue("@UserName", UserName);
                 cmd.Parameters.AddWithValue("@PasswordHash", hashedPassword);
 
                 conn.Open();
@@ -44,7 +44,7 @@ namespace main.Data
                     user = new User
                     {
                         ID = (int)reader["ID"],
-                        Username = reader["Username"].ToString(),
+                        UserName = reader["UserName"].ToString(),
                         PasswordHash = reader["PasswordHash"].ToString(),
                         Email = reader["Email"].ToString(),
                         FullName = reader["FullName"].ToString(),
@@ -61,14 +61,16 @@ namespace main.Data
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    string query = @"INSERT INTO Users (Username, PasswordHash, Email, FullName, PhoneNumber, UserType) 
-                                   VALUES (@Username, @PasswordHash, @Email, @FullName, @PhoneNumber, @UserType)";
+                    string query = @"INSERT INTO Users (UserName, PasswordHash, Email, FullName, PhoneNumber, UserType) 
+                                   VALUES (@UserName, @PasswordHash, @Email, @FullName, @PhoneNumber, @UserType)";
 
                     SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Username", user.Username);
+                    cmd.Parameters.AddWithValue("@UserName", user.UserName);
                     cmd.Parameters.AddWithValue("@PasswordHash", HashPassword(password));
                     cmd.Parameters.AddWithValue("@Email", user.Email);
                     cmd.Parameters.AddWithValue("@FullName", user.FullName);
+                    cmd.Parameters.AddWithValue("@PhoneNumber", user.PhoneNumber);
+                    cmd.Parameters.AddWithValue("@UserType", user.UserType);
 
                     conn.Open();
                     int result = cmd.ExecuteNonQuery();
@@ -81,13 +83,13 @@ namespace main.Data
             }
         }
 
-        public bool IsUsernameExists(string username)
+        public bool IsUsernameExists(string UserName)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "SELECT COUNT(1) FROM Users WHERE Username = @Username";
+                string query = "SELECT COUNT(1) FROM User WHERE UserName = @UserName";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Username", username);
+                cmd.Parameters.AddWithValue("@UserName", UserName);
 
                 conn.Open();
                 int count = (int)cmd.ExecuteScalar();
