@@ -9,8 +9,6 @@ namespace main.Data
 {
     public class DatabaseHelper
     {
-        //private string connectionString = @"Data Source=DESKTOP-4OM7515\\SQLEXPRESS;Initial Catalog=RentalPlatform;Integrated Security=True";
-
         public static string connectionString = "Server=DESKTOP-4OM7515\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         public string HashPassword(string password)
         {

@@ -36,7 +36,7 @@ namespace main.Views
                 HostID = 3
 
             };
-                using (var conn = _dbHelper.Connection)
+            using (var conn = _dbHelper.Connection)
             {
                 string sql = @"
                 INSERT INTO Property (HostID, WardID, Title, Address, Price, Description, Status, CreatedAt)

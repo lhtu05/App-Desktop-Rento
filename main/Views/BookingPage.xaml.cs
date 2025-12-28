@@ -34,7 +34,7 @@ namespace main.Views
 
         private void LoadCities()
         {
-            using (var conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
             {
                 var cities = conn.Query<City>("SELECT ID, Name FROM City").ToList();
                 CityComboBox.ItemsSource = cities;
@@ -46,7 +46,7 @@ namespace main.Views
 
         private void LoadWards(int cityID)
         {
-            using (var conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
             {
                 var wards = conn.Query<Ward>("SELECT ID, Name, CityID FROM Ward WHERE CityID=@CityID", new { CityID = cityID }).ToList();
                 WardComboBox.ItemsSource = wards;
@@ -57,7 +57,7 @@ namespace main.Views
 
         private void LoadProperties(int cityID, int? wardID)
         {
-            using (var conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
             {
                 string sql = @"
                 SELECT p.ID, p.Title, p.Price, p.Street, p.Address

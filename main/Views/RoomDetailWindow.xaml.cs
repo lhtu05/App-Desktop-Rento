@@ -24,7 +24,7 @@ namespace main.Views
 
         private void LoadProperty()
         {
-            using (var conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
             {
                 var sql = "SELECT * FROM Property WHERE ID = @ID";
                 var room = conn.QueryFirstOrDefault<Property>(sql, new { ID = _propertyId });
@@ -40,7 +40,7 @@ namespace main.Views
 
         private void Book_Click(object sender, RoutedEventArgs e)
         {
-            using (var conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
             {
                 // 1. Lấy thông tin host của phòng
                 string sqlHost = @"SELECT u.PhoneNumber
