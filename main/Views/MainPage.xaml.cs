@@ -1,4 +1,5 @@
 ﻿using main.Models;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,21 +10,47 @@ namespace main.Views
     {
         private MainWindow _mainWindow;
 
+        public ObservableCollection<Property> Rooms { get; set; }
+
         public MainPage(MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            Rooms = new ObservableCollection<Property>();
         }
+
         private void NavigateToRegisterPage(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
             _mainWindow?.NavigateToRegisterPage();
         }
-        private void NavigateToLoginPage(object sender, RoutedEventArgs e)
+
+        private void NavigateToLoginPage(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
             _mainWindow?.NavigateToLoginPage();
         }
+
+        private void NavigateToPostWindow(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow?.NavigateToPostWindow();
+        }
+
+      
+
+        private void HNButton_Click(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow.NavigateToBookingPage(1); 
+        }
+
+        private void TPHCMButton_Click(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow.NavigateToBookingPage(2);
+        }
+
 
     }
 }

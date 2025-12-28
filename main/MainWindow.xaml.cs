@@ -10,9 +10,14 @@ namespace main
     {
         private DatabaseHelper dbHelper;
 
+        public MainPage MainPage { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            MainPage = new MainPage(this);
+            MainFrame.Content = MainPage;
             dbHelper = new DatabaseHelper("Server=.\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;");
 
             // Load trang chính đầu tiên
@@ -33,6 +38,14 @@ namespace main
             MainFrame.Navigate(loginPage);
         }
 
+        public void NavigateToPostWindow()
+        {
+            var postWindow = new PostWindow(dbHelper, this);
+            postWindow.Owner = this;
+            postWindow.Show(); // or ShowDialog();
+        }
+
+
         // Phương thức điều hướng đến trang đăng ký
         public void NavigateToRegisterPage()
         {
@@ -45,6 +58,12 @@ namespace main
         {
             var userMainPage = new UserMainPage(User, this);
             MainFrame.Navigate(userMainPage);
+        }
+
+        public void NavigateToBookingPage(int cityId)
+        {
+            var bookingPage = new BookingPage(dbHelper, this, cityId);
+            MainFrame.Navigate(bookingPage);
         }
     }
 }
