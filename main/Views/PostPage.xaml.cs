@@ -9,13 +9,13 @@ using System.Windows.Controls;
 namespace main.Views
 {
 
-    public partial class PostWindow : Window
+    public partial class PostPage : UserControl
     {
         private DatabaseHelper _dbHelper;
         private MainWindow _mainWindow;
         private int _cityID;
 
-        public PostWindow(DatabaseHelper dbHelper, MainWindow mainWindow)
+        public PostPage(DatabaseHelper dbHelper, MainWindow mainWindow)
         {
             InitializeComponent();
             _dbHelper = dbHelper;

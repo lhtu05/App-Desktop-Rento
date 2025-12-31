@@ -1,8 +1,7 @@
-﻿<Window x:Class="main.Views.PostWindow"
+﻿<UserControl x:Class="main.Views.PostPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Post Room" Height="600" Width="600"
-        WindowStartupLocation="CenterOwner">
+        Height="600" Width="600">
 
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -81,4 +80,4 @@
         </StackPanel>
 
     </Grid>
-</Window>
+</UserControl>

@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace main.Views
 {
@@ -31,10 +30,10 @@ namespace main.Views
             _mainWindow?.NavigateToLoginPage();
         }
 
-        private void NavigateToPostWindow(object sender, RoutedEventArgs e)
+        private void NavigateToPostPage(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
-            _mainWindow?.NavigateToPostWindow();
+            _mainWindow?.NavigateToPostPage();
         }
 
       

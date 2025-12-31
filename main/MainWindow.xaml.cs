@@ -38,11 +38,10 @@ namespace main
             MainFrame.Navigate(loginPage);
         }
 
-        public void NavigateToPostWindow()
+        public void NavigateToPostPage()
         {
-            var postWindow = new PostWindow(dbHelper, this);
-            postWindow.Owner = this;
-            postWindow.Show(); // or ShowDialog();
+            var postPage = new PostPage(dbHelper, this);
+            MainFrame.Navigate(postPage);
         }
 
 

@@ -2,19 +2,20 @@
 using main.Models;
 using Dapper;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Data.SqlClient;
 
 
 namespace main.Views
 {
     /// <summary>
-    /// Interaction logic for RoomDetailWindow.xaml
+    /// Interaction logic for RoomDetailPage.xaml
     /// </summary>
-    public partial class RoomDetailWindow : Window
+    public partial class RoomDetailPage : UserControl
     {
         private int _propertyId;
 
-        public RoomDetailWindow(int propertyId)
+        public RoomDetailPage(int propertyId)
         {
             InitializeComponent();
             _propertyId = propertyId;

@@ -94,7 +94,7 @@ namespace main.Views
             Button btn = sender as Button;
             int roomId = (int)btn.Tag;
 
-            var detailWindow = new RoomDetailWindow(roomId);
+            var detailWindow = new RoomDetailPage(roomId);
             detailWindow.Show();
         }
 
