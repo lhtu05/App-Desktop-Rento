@@ -64,5 +64,11 @@ namespace main
             var bookingPage = new BookingPage(dbHelper, this, cityId);
             MainFrame.Navigate(bookingPage);
         }
+
+        public void NavigateToRoomDetailPage(int propertyId)
+        {
+            var roomDetailPage = new RoomDetailPage(propertyId);
+            MainFrame.Navigate(roomDetailPage);
+        }
     }
 }

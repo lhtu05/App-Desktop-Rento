@@ -11,7 +11,7 @@ namespace main.Views
     /// <summary>
     /// Interaction logic for BookingPage.xaml
     /// </summary>
-    public partial class BookingPage : Page
+    public partial class BookingPage : UserControl
     {
         private DatabaseHelper _dbHelper;
         private MainWindow _mainWindow;
@@ -94,8 +94,8 @@ namespace main.Views
             Button btn = sender as Button;
             int roomId = (int)btn.Tag;
 
-            var detailWindow = new RoomDetailPage(roomId);
-            detailWindow.Show();
+            e.Handled = true;
+            _mainWindow.NavigateToBookingPage(roomId);
         }
 
 
