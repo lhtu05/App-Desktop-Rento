@@ -5,12 +5,12 @@ using System.Windows.Controls;
 
 namespace main.Views
 {
-    public partial class RegisterPage : UserControl
+    public partial class HostRegisterPage : UserControl
     {
         private DatabaseHelper _dbHelper;
         private MainWindow _mainWindow;
 
-        public RegisterPage(DatabaseHelper dbHelper , MainWindow mainWindow)
+        public HostRegisterPage(DatabaseHelper dbHelper , MainWindow mainWindow)
         {
             InitializeComponent();
             _dbHelper = dbHelper;
@@ -58,18 +58,21 @@ namespace main.Views
                 //        MessageBoxButton.OK, MessageBoxImage.Error);
                 //    return;
                 //}
-
-                User newUser = new User
+                Account newAccount = new Account
                 {
-                    FullName = txtFullName.Text,
                     UserName = txtUsername.Text,
-                    Email = txtEmail.Text,
-                    PhoneNumber = txtPhone.Text,
-                    PasswordHash = txtPassword.Password,   // sau này đổi sang hash
-                    UserType = cmbUserType.Text,
+                    PasswordHash = txtPassword.Password, // sau này đổi sang hash
+                    Host = new Host
+                    {
+                        FullName = txtFullName.Text,
+                        Email = txtEmail.Text,
+                        PhoneNumber = txtPhone.Text,
+                    },
+                    Role = true // Host
                 };
+                
 
-                if (_dbHelper.Register(newUser, txtPassword.Password))
+                if (_dbHelper.Register(newAccount))
                 {
                     MessageBox.Show("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.",
                         "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -89,7 +92,7 @@ namespace main.Views
             }
             using (var conn = _dbHelper.Connection)
             {
-                string sql = @"INSERT INTO Users (UserName, PasswordHash, Email, FullName, PhoneNumber, UserType) 
+                string sql = @"INSERT INTO Renter (UserName, PasswordHash, Email, FullName, PhoneNumber, UserType) 
                                    VALUES (@UserName, @PasswordHash, @Email, @FullName, @PhoneNumber, @UserType)";
 
                 //int newPropertyId = conn.QuerySingle<int>(sql, room);

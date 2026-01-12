@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace main.Models {
-    public class User
+﻿namespace main.Models 
+{
+    public class Host
     {
         public int ID { get; set; }
         public string FullName { get; set; }

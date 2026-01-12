@@ -5,41 +5,23 @@ using System.Windows.Controls;
 
 namespace main.Views
 {
-    public partial class MainPage : UserControl
+    public partial class RenterMainPage : UserControl
     {
         private MainWindow _mainWindow;
 
         public ObservableCollection<Property> Rooms { get; set; }
 
-        public MainPage(MainWindow mainWindow)
+        public RenterMainPage(Renter renter, MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
             Rooms = new ObservableCollection<Property>();
         }
 
-        private void NavigateToHostRegisterPage(object sender, RoutedEventArgs e)
+        private void NavigateToMainPage(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
-            _mainWindow?.NavigateToHostRegisterPage();
-        }
-
-        private void NavigateToRenterRegisterPage(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToRenterRegisterPage();
-        }
-
-        private void NavigateToLoginPage(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToLoginPage();
-        }
-
-        private void NavigateToPostPage(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToPostPage();
+            _mainWindow?.NavigateToMainPage();
         }
 
         private void HNButton_Click(object sender, RoutedEventArgs e)

@@ -17,7 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\UserMainPage.xaml.cs">
+    <Compile Update="Views\HostRegisterPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\HostMainPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\RenterMainPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

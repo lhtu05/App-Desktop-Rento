@@ -31,14 +31,25 @@ namespace main.Views
 
             try
             {
-                User User = _dbHelper.Login(UserName, password);
-                if (User != null)
+                Account account = _dbHelper.Login(UserName, password);
+                if (account != null && !account.Role)
                 {
-                    MessageBox.Show($"Đăng nhập thành công! Chào mừng {User.FullName}",
+                    Renter renter = account.Renter;
+
+                    MessageBox.Show($"Đăng nhập thành công! Chào mừng {renter.FullName}",
                         "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     // Điều hướng đến trang chính
-                    _mainWindow.NavigateToUserMainPage(User);
+                    _mainWindow.NavigateToRenterMainPage(renter);
+                }
+                else if (account != null && account.Role)
+                {
+                    Host host = account.Host;
+                    MessageBox.Show($"Đăng nhập thành công! Chào mừng {host.FullName}",
+                        "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Điều hướng đến trang chính
+                    _mainWindow.NavigateToHostMainPage(host);
                 }
                 else
                 {
@@ -56,7 +67,7 @@ namespace main.Views
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
             // Điều hướng đến trang đăng ký
-            _mainWindow.NavigateToRegisterPage();
+            _mainWindow.NavigateToRenterRegisterPage();
         }
     }
 }

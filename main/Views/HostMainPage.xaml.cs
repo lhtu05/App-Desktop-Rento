@@ -5,23 +5,17 @@ using System.Windows.Controls;
 
 namespace main.Views
 {
-    public partial class MainPage : UserControl
+    public partial class HostMainPage : UserControl
     {
         private MainWindow _mainWindow;
 
         public ObservableCollection<Property> Rooms { get; set; }
 
-        public MainPage(MainWindow mainWindow)
+        public HostMainPage(Host host,MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
             Rooms = new ObservableCollection<Property>();
-        }
-
-        private void NavigateToHostRegisterPage(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToHostRegisterPage();
         }
 
         private void NavigateToRenterRegisterPage(object sender, RoutedEventArgs e)

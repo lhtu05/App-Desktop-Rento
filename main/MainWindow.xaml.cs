@@ -46,19 +46,28 @@ namespace main
 
 
         // Phương thức điều hướng đến trang đăng ký
-        public void NavigateToRegisterPage()
+        public void NavigateToRenterRegisterPage()
         {
-            var registerPage = new RegisterPage(dbHelper, this);
-            MainFrame.Navigate(registerPage);
+            var RenterRegisterPage = new RenterRegisterPage(dbHelper, this);
+            MainFrame.Navigate(RenterRegisterPage);
+        }
+        public void NavigateToHostRegisterPage()
+        {
+            var HostRegisterPage = new HostRegisterPage(dbHelper, this);
+            MainFrame.Navigate(HostRegisterPage);
         }
 
         // Phương thức điều hướng đến trang chính sau khi đăng nhập thành công
-        public void NavigateToUserMainPage(User User)
+        public void NavigateToHostMainPage(Host host)
         {
-            var userMainPage = new UserMainPage(User, this);
-            MainFrame.Navigate(userMainPage);
+            var hostMainPage = new HostMainPage(host, this);
+            MainFrame.Navigate(hostMainPage);
         }
-
+        public void NavigateToRenterMainPage(Renter renter)
+        {
+            var renterMainPage = new RenterMainPage(renter, this);
+            MainFrame.Navigate(renterMainPage);
+        }
         public void NavigateToBookingPage(int cityId)
         {
             var bookingPage = new BookingPage(dbHelper, this, cityId);

@@ -58,7 +58,7 @@ namespace main.Views
                 conn.Execute(sqlBooking, new
                 {
                     PropertyID = _propertyId,
-                    RenterID = 4,                 // TODO: lấy user hiện tại
+                    RenterID = 4,                 // TODO: lấy Renter hiện tại
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(1),
                     Status = "PENDING"
