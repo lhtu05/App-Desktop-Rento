@@ -92,10 +92,10 @@ namespace main.Views
         private void ViewRoom_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            int roomId = (int)btn.Tag;
+            int ID = (int)btn.Tag;
 
             e.Handled = true;
-            _mainWindow.NavigateToBookingPage(roomId);
+            _mainWindow.NavigateToBookingPage(ID);
         }
 
 

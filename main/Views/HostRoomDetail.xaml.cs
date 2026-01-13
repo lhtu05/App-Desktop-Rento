@@ -35,8 +35,8 @@ namespace main.Views
 
         private void LoadRoomData()
         {
-            // TODO: Load room data from database based on _roomId
-            txtDetailRoomName.Text = "Phòng 101 - SMI House";
+            // TODO: Load room data from database based on _ID
+            txtDetailTitle.Text = "Phòng 101 - SMI House";
             txtDetailAddress.Text = "123 Võ Văn Ngân, Phường Linh Chiểu, Thủ Đức, TP.HCM";
             txtDetailPrice.Text = "5.300.000đ/tháng";
             txtDetailArea.Text = "30m²";
@@ -102,7 +102,7 @@ namespace main.Views
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
-            _mainWindow?.NavigateToEditRoomPage(_roomId);
+            _mainWindow?.NavigateToEditRoomPage(_ID);
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

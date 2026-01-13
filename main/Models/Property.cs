@@ -27,7 +27,9 @@ namespace main.Models
         public string Street { get; set; }
 
         public DateTime CreatedAt { get; set; }
-            
+        public string StatusColor => Status == "Trống" ? "#4CAF50" :
+                                       Status == "Đã thuê" ? "#F44336" : "#FFC107";
+
     }
 
 }

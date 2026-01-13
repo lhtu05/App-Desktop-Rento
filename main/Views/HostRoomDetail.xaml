@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="main.Views.HostRoomDetail"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" Width="534">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Background="#F5F5F5"> <!--Padding="20"-->
@@ -72,7 +72,7 @@
 
                                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Tên phòng:" 
                                               FontWeight="SemiBold" Margin="0,0,0,10"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="txtDetailRoomName" 
+                                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="txtDetailTitle" 
                                               Margin="0,0,0,10"/>
 
                                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Địa chỉ:" 

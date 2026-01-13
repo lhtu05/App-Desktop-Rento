@@ -101,7 +101,7 @@
                                     <GridViewColumn Header="Tên phòng" Width="200">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding RoomName}" 
+                                                <TextBlock Text="{Binding Title}" 
                                                             FontWeight="SemiBold"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -138,21 +138,16 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Content="Xem" 
-                                                            Background="#2E86AB" Foreground="White"
-                                                            Padding="10,5" Margin="0,0,5,0"
-                                                            Click="ViewRoom_Click"
-                                                            Tag="{Binding RoomId}"/>
                                                     <Button Content="Sửa" 
-                                                            Background="#FFC107" Foreground="#333"
+                                                            Background="#2E86AB" Foreground="#333"
                                                             Padding="10,5" Margin="0,0,5,0"
                                                             Click="EditRoom_Click"
-                                                            Tag="{Binding RoomId}"/>
+                                                            Tag="{Binding ID}"/>
                                                     <Button Content="Xóa" 
                                                             Background="#F44336" Foreground="White"
                                                             Padding="10,5"
                                                             Click="DeleteRoom_Click"
-                                                            Tag="{Binding RoomId}"/>
+                                                            Tag="{Binding ID}"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>

@@ -45,7 +45,7 @@ namespace main.Views
         private void PostRoom_Click(object sender, RoutedEventArgs e)
         {
             // Validate data
-            if (string.IsNullOrWhiteSpace(txtRoomName.Text) ||
+            if (string.IsNullOrWhiteSpace(txtTitle.Text) ||
                 string.IsNullOrWhiteSpace(txtAddress.Text) ||
                 string.IsNullOrWhiteSpace(txtPrice.Text) ||
                 string.IsNullOrWhiteSpace(txtArea.Text))

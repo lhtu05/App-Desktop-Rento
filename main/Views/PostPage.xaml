@@ -43,7 +43,7 @@
                     <!-- Room Name -->
                     <StackPanel Grid.Row="0" Margin="0,0,0,20">
                         <TextBlock Text="Tên phòng*" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                        <TextBox x:Name="txtRoomName" 
+                        <TextBox x:Name="txtTitle" 
                                  materialDesign:HintAssist.Hint="Ví dụ: Phòng 101 - SMI House"
                                  FontSize="14" Padding="10" 
                                  BorderBrush="#E0E0E0" BorderThickness="1"/>
