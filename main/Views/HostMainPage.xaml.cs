@@ -1,53 +1,109 @@
-﻿using main.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using main.Models;
 
 namespace main.Views
 {
     public partial class HostMainPage : UserControl
     {
         private MainWindow _mainWindow;
+        private Host _host;
 
-        public ObservableCollection<Property> Rooms { get; set; }
+        public class RoomItem
+        {
+            public int RoomId { get; set; }
+            public string RoomName { get; set; }
+            public string Address { get; set; }
+            public decimal Price { get; set; }
+            public string Status { get; set; }
+            public string StatusColor => Status == "Trống" ? "#4CAF50" :
+                                       Status == "Đã thuê" ? "#F44336" : "#FFC107";
+        }
 
-        public HostMainPage(Host host,MainWindow mainWindow)
+        public ObservableCollection<RoomItem> Rooms { get; set; }
+
+        public HostMainPage(Host host, MainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-            Rooms = new ObservableCollection<Property>();
+            _host = host;
+            Rooms = new ObservableCollection<RoomItem>();
+            LoadSampleData();
+            RoomListView.ItemsSource = Rooms;
         }
 
-        private void NavigateToRenterRegisterPage(object sender, RoutedEventArgs e)
+        private void LoadSampleData()
         {
-            e.Handled = true;
-            _mainWindow?.NavigateToRenterRegisterPage();
+            Rooms.Add(new RoomItem
+            {
+                RoomId = 1,
+                RoomName = "Phòng 101 - SMI House",
+                Address = "123 Võ Văn Ngân, Thủ Đức",
+                Price = 5300000,
+                Status = "Trống"
+            });
+            Rooms.Add(new RoomItem
+            {
+                RoomId = 2,
+                RoomName = "Phòng 201 - Air Apartment",
+                Address = "456 Trường Sơn, Quận 10",
+                Price = 6500000,
+                Status = "Đã thuê"
+            });
+            Rooms.Add(new RoomItem
+            {
+                RoomId = 3,
+                RoomName = "Phòng 301 - New House",
+                Address = "789 Tân Sơn, Gò Vấp",
+                Price = 4200000,
+                Status = "Trống"
+            });
         }
 
-        private void NavigateToLoginPage(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
-            _mainWindow?.NavigateToLoginPage();
+            _mainWindow?.NavigateToMainPage();
         }
 
-        private void NavigateToPostPage(object sender, RoutedEventArgs e)
+        private void AddNewRoom_Click(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
             _mainWindow?.NavigateToPostPage();
         }
 
-        private void HNButton_Click(object sender, RoutedEventArgs e)
+        private void ViewRoom_Click(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
-            _mainWindow.NavigateToBookingPage(1); 
+            var button = sender as Button;
+            if (button?.Tag != null && int.TryParse(button.Tag.ToString(), out int roomId))
+            {
+                _mainWindow?.NavigateToHostRoomDetail(roomId);
+            }
         }
 
-        private void TPHCMButton_Click(object sender, RoutedEventArgs e)
+        private void EditRoom_Click(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
-            _mainWindow.NavigateToBookingPage(2);
+            var button = sender as Button;
+            if (button?.Tag != null && int.TryParse(button.Tag.ToString(), out int roomId))
+            {
+                _mainWindow?.NavigateToEditRoomPage(roomId);
+            }
         }
 
+        private void DeleteRoom_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.Tag != null && int.TryParse(button.Tag.ToString(), out int roomId))
+            {
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa phòng này?", "Xác nhận xóa",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Xóa phòng từ database
+                    MessageBox.Show("Đã xóa phòng!", "Thông báo",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
     }
 }

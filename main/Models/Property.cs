@@ -10,7 +10,7 @@ namespace main.Models
     {
         public int ID { get; set; }
 
-        public int HostID { get; set; }
+        public Host Host { get; set; }
 
         public int WardID { get; set; }
 

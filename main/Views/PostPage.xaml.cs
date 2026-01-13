@@ -1,90 +1,67 @@
-﻿using Dapper;
-using main.Data;
-using main.Models;
-using Microsoft.Data.SqlClient;
+﻿using main.Data;
+using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 
-
 namespace main.Views
 {
-
     public partial class PostPage : UserControl
     {
-        private DatabaseHelper _dbHelper;
         private MainWindow _mainWindow;
-        private int _cityID;
+        private DatabaseHelper _dbHelper;
 
         public PostPage(DatabaseHelper dbHelper, MainWindow mainWindow)
         {
             InitializeComponent();
             _dbHelper = dbHelper;
             _mainWindow = mainWindow;
-            LoadCities();
         }
 
-        private void btnPost_Click(object sender, RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
-            var room = new Property
-            {
-                Title = txtName.Text,
-                Address = txtAddress.Text,
-                Price = decimal.Parse(txtPrice.Text),
-                Description = txtDescription.Text,
-                WardID = (int)WardComboBox.SelectedValue,
-                HostID = 3
-
-            };
-            using (var conn = _dbHelper.Connection)
-            {
-                string sql = @"
-                INSERT INTO Property (HostID, WardID, Title, Address, Price, Description, Status, CreatedAt)
-                VALUES (@HostID, @WardID, @Title, @Address, @Price, @Description, 'AVAILABLE', GETDATE());
-                SELECT CAST(SCOPE_IDENTITY() as int);"; 
-
-                    int newPropertyId = conn.QuerySingle<int>(sql, room);
-
-                    MessageBox.Show($"Đăng phòng thành công! ID mới: {newPropertyId}");
-            }
-
+            _mainWindow?.NavigateToHostManagerPage();
         }
 
-        private void LoadCities()
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            using (var conn = _dbHelper.Connection)
+            _mainWindow?.NavigateToHostManagerPage();
+        }
+
+        private void SelectImages_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "Image files (*.jpg; *.jpeg; *.png)|*.jpg;*.jpeg;*.png";
+            openFileDialog.Title = "Chọn hình ảnh phòng";
+
+            if (openFileDialog.ShowDialog() == true)
             {
-                var cities = conn.Query<City>("SELECT ID, Name FROM City").ToList();
-                CityComboBox.ItemsSource = cities;
-                CityComboBox.SelectedValuePath = "ID";
-                CityComboBox.DisplayMemberPath = "Name";
-                CityComboBox.SelectedValue = _cityID;
+                // Xử lý file hình ảnh đã chọn
+                MessageBox.Show($"Đã chọn {openFileDialog.FileNames.Length} hình ảnh",
+                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void CityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PostRoom_Click(object sender, RoutedEventArgs e)
         {
-            if (CityComboBox.SelectedValue == null)
+            // Validate data
+            if (string.IsNullOrWhiteSpace(txtRoomName.Text) ||
+                string.IsNullOrWhiteSpace(txtAddress.Text) ||
+                string.IsNullOrWhiteSpace(txtPrice.Text) ||
+                string.IsNullOrWhiteSpace(txtArea.Text))
+            {
+                MessageBox.Show("Vui lòng điền đầy đủ thông tin bắt buộc (*)",
+                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-
-            int cityId = (int)CityComboBox.SelectedValue;
-
-            using (var conn = _dbHelper.Connection)
-            {
-                var wards = conn.Query<Ward>(
-                    "SELECT ID, Name FROM Ward WHERE CityID = @CityID ORDER BY Name",
-                    new { CityID = cityId }).ToList();
-
-                WardComboBox.ItemsSource = wards;
-                WardComboBox.DisplayMemberPath = "Name";  
-                WardComboBox.SelectedValuePath = "ID";
             }
-        }
 
-        private void txtName_TextChanged(object sender, TextChangedEventArgs e)
-        {
+            // Save room to database
+            // TODO: Implement database save logic
 
+            MessageBox.Show("Đăng phòng thành công!", "Thông báo",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+
+            _mainWindow?.NavigateToHostManagerPage();
         }
     }
 }

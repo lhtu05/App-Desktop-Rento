@@ -9,13 +9,13 @@ using Microsoft.Data.SqlClient;
 namespace main.Views
 {
     /// <summary>
-    /// Interaction logic for RoomDetailPage.xaml
+    /// Interaction logic for RenterRoomDetail.xaml
     /// </summary>
-    public partial class RoomDetailPage : UserControl
+    public partial class RenterRoomDetail : UserControl
     {
         private int _propertyId;
 
-        public RoomDetailPage(int propertyId)
+        public RenterRoomDetail(int propertyId)
         {
             InitializeComponent();
             _propertyId = propertyId;

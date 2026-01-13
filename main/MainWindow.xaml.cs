@@ -9,7 +9,6 @@ namespace main
     public partial class MainWindow : Window
     {
         private DatabaseHelper dbHelper;
-
         public MainPage MainPage { get; set; }
 
         public MainWindow()
@@ -74,10 +73,16 @@ namespace main
             MainFrame.Navigate(bookingPage);
         }
 
-        public void NavigateToRoomDetailPage(int propertyId)
+        public void NavigateToRenterRoomDetail(int propertyId)
         {
-            var roomDetailPage = new RoomDetailPage(propertyId);
-            MainFrame.Navigate(roomDetailPage);
+            var renterRoomDetail = new RenterRoomDetail(propertyId);
+            MainFrame.Navigate(renterRoomDetail);
+        }
+
+        public void NavigateToHostRoomDetail(Property property)
+        {
+            var hostRoomDetail = new HostRoomDetail(this, property, true); // true for edit mode
+            MainFrame.Navigate(hostRoomDetail);
         }
     }
 }
