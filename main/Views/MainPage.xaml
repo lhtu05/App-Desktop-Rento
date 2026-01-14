@@ -14,7 +14,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="Rento" Padding="10"
+                    <TextBlock Grid.Column="0" Text="Rento" Padding="20"
                               Foreground="White" FontSize="36" FontWeight="Bold" 
                               VerticalAlignment="Center"/>
 

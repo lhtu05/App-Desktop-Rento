@@ -19,149 +19,186 @@
                                 Click="BackButton_Click">
                             <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
                         </Button>
-                        <TextBlock Text="Quản lý phòng trọ" 
+                        <TextBlock x:Name="txtHeaderTitle" Text="Quản lý phòng trọ" 
                                   Foreground="White" FontSize="24" FontWeight="Bold" 
                                   VerticalAlignment="Center" Margin="20,0,0,0"/>
                     </StackPanel>
 
-                    <Button Grid.Column="1" Content="Thêm phòng mới" 
-                            Background="#A23B72" Foreground="White" 
-                            BorderThickness="0" Padding="20,10" 
-                            Margin="0,0,20,0" FontSize="14" FontWeight="SemiBold"
-                            Click="AddNewRoom_Click"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                        <Button Content="Thêm phòng mới" 
+                                Background="#A23B72" Foreground="White"
+                                Padding="15,8" Margin="0,0,10,0"
+                                FontSize="14" FontWeight="SemiBold"
+                                Click="AddNewProperty_Click"/>
+                        <Button Content="Thống kê" 
+                                Background="#4CAF50" Foreground="White"
+                                Padding="15,8" FontSize="14" FontWeight="SemiBold"
+                                Click="StatisticsButton_Click"/>
+                    </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Main Content -->
-            <Grid Margin="0,70,0,0">
-                <!-- Padding="20" -->
-
-                <!-- Summary Cards -->
+            <Grid Margin="0,70,0,0" Padding="20">
+                <!-- Dashboard Summary -->
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
-                    <!-- Total Rooms Card -->
-                    <Border Width="200" Background="White" CornerRadius="10" 
-                            Padding="20" Margin="0,0,20,0">
+                    <Border Width="200" Background="White" CornerRadius="10" Padding="20" Margin="0,0,20,0">
                         <StackPanel>
                             <TextBlock Text="Tổng số phòng" FontSize="14" Foreground="#666"/>
-                            <TextBlock Text="12" FontSize="32" FontWeight="Bold" 
-                                        Foreground="#2E86AB" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="txtTotalProperties" Text="12" FontSize="32" FontWeight="Bold" 
+                                      Foreground="#2E86AB" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Available Rooms Card -->
-                    <Border Width="200" Background="White" CornerRadius="10" 
-                            Padding="20" Margin="0,0,20,0">
+                    <Border Width="200" Background="White" CornerRadius="10" Padding="20" Margin="0,0,20,0">
                         <StackPanel>
                             <TextBlock Text="Phòng trống" FontSize="14" Foreground="#666"/>
-                            <TextBlock Text="5" FontSize="32" FontWeight="Bold" 
-                                        Foreground="#4CAF50" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="txtAvailableProperties" Text="5" FontSize="32" FontWeight="Bold" 
+                                      Foreground="#4CAF50" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Rented Rooms Card -->
-                    <Border Width="200" Background="White" CornerRadius="10" 
-                            Padding="20" Margin="0,0,20,0">
+                    <Border Width="200" Background="White" CornerRadius="10" Padding="20" Margin="0,0,20,0">
                         <StackPanel>
-                            <TextBlock Text="Phòng đã thuê" FontSize="14" Foreground="#666"/>
-                            <TextBlock Text="7" FontSize="32" FontWeight="Bold" 
-                                        Foreground="#FF6B6B" Margin="0,5,0,0"/>
+                            <TextBlock Text="Đang thuê" FontSize="14" Foreground="#666"/>
+                            <TextBlock x:Name="txtRentedProperties" Text="7" FontSize="32" FontWeight="Bold" 
+                                      Foreground="#FF6B6B" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Width="200" Background="White" CornerRadius="10" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="Đánh giá trung bình" FontSize="14" Foreground="#666"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <materialDesign:PackIcon Kind="Star" Foreground="#FFC107" Width="20" Height="20"/>
+                                <TextBlock x:Name="txtAverageRating" Text="4.5" FontSize="32" FontWeight="Bold" 
+                                          Foreground="#2E86AB" Margin="5,0,0,0"/>
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                 </StackPanel>
 
-                <!-- Room List -->
+                <!-- Property List -->
                 <Border Background="White" CornerRadius="10" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Danh sách phòng" FontSize="18" FontWeight="Bold" 
-                                    Foreground="#2E86AB" Margin="0,0,0,20"/>
+                        <!-- Action Bar -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                            <TextBlock Text="Danh sách phòng của bạn" 
+                                      FontSize="18" FontWeight="Bold" 
+                                      Foreground="#2E86AB"/>
 
-                        <!-- Search Bar -->
-                        <Border Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1" 
-                                CornerRadius="25" Padding="15" Margin="0,0,0,20">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="0" Text="" 
-                                            BorderThickness="0" Background="Transparent"
-                                            Foreground="#333" FontSize="14"
-                                            materialDesign:HintAssist.Hint="Tìm kiếm phòng..."/>
-                                <Button Grid.Column="1" Content="Tìm" 
-                                        Background="#2E86AB" Foreground="White"
-                                        BorderThickness="0" Padding="20,8" 
-                                        materialDesign:ButtonAssist.CornerRadius="15"/>
-                            </Grid>
-                        </Border>
+                            <Border Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1" 
+                                    CornerRadius="25" Padding="10" Margin="20,0,0,0">
+                                <TextBox Text="" Width="300" BorderThickness="0" 
+                                         Background="Transparent" materialDesign:HintAssist.Hint="Tìm kiếm phòng..."/>
+                            </Border>
 
-                        <!-- Room List Table -->
-                        <ListView x:Name="RoomListView" BorderThickness="0">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Tên phòng" Width="200">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Title}" 
-                                                            FontWeight="SemiBold"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Địa chỉ" Width="250">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Address}" 
-                                                            TextWrapping="Wrap"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Giá" Width="120">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Price, StringFormat='{}{0:N0}đ'}" 
-                                                            Foreground="#2E86AB" FontWeight="SemiBold"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Trạng thái" Width="120">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Border Background="{Binding StatusColor}" 
-                                                        CornerRadius="15" Padding="5,2">
-                                                    <TextBlock Text="{Binding Status}" 
-                                                                HorizontalAlignment="Center" 
-                                                                Foreground="White" FontSize="12"/>
-                                                </Border>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Thao tác" Width="200">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Content="Sửa" 
-                                                            Background="#2E86AB" Foreground="#333"
-                                                            Padding="10,5" Margin="0,0,5,0"
-                                                            Click="EditRoom_Click"
-                                                            Tag="{Binding ID}"/>
-                                                    <Button Content="Xóa" 
-                                                            Background="#F44336" Foreground="White"
-                                                            Padding="10,5"
-                                                            Click="DeleteRoom_Click"
-                                                            Tag="{Binding ID}"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
-                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                                    <Setter Property="Padding" Value="10"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+                            <ComboBox x:Name="cmbFilterStatus" Margin="20,0,0,0" Width="150" SelectedIndex="0">
+                                <ComboBoxItem Content="Tất cả trạng thái"/>
+                                <ComboBoxItem Content="Đang trống"/>
+                                <ComboBoxItem Content="Đang thuê"/>
+                                <ComboBoxItem Content="Đang chờ duyệt"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Property Grid -->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Column Headers -->
+                            <Border Grid.Row="0" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="200"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Hình ảnh & Tiêu đề" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="Địa chỉ" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="2" Text="Giá" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="3" Text="Trạng thái" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="4" Text="Thao tác" FontWeight="SemiBold"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Property Items -->
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="propertyItemsControl" Margin="0,10,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" 
+                                                    Padding="10" Margin="0,0,0,10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="250"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="150"/>
+                                                        <ColumnDefinition Width="120"/>
+                                                        <ColumnDefinition Width="200"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- Property Info -->
+                                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                        <Border Width="80" Height="60" 
+                                                                Background="#F8F9FA" CornerRadius="5"
+                                                                Margin="0,0,10,0">
+                                                            <Image Source="{Binding MainImageUrl}" 
+                                                                   Stretch="UniformToFill"/>
+                                                        </Border>
+                                                        <TextBlock Text="{Binding Title}" 
+                                                                  FontWeight="SemiBold" 
+                                                                  VerticalAlignment="Center"
+                                                                  TextWrapping="Wrap"/>
+                                                    </StackPanel>
+
+                                                    <TextBlock Grid.Column="1" Text="{Binding Address}" 
+                                                              VerticalAlignment="Center" TextWrapping="Wrap"/>
+
+                                                    <TextBlock Grid.Column="2" 
+                                                              Text="{Binding Price, StringFormat='{}{0:N0} đ'}" 
+                                                              VerticalAlignment="Center" Foreground="#2E86AB" 
+                                                              FontWeight="SemiBold"/>
+
+                                                    <!-- Status -->
+                                                    <Border Grid.Column="3" 
+                                                            Background="{Binding StatusColor}" 
+                                                            CornerRadius="15" Padding="5,2"
+                                                            VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding Status}" 
+                                                                  HorizontalAlignment="Center" 
+                                                                  Foreground="White" FontSize="12"/>
+                                                    </Border>
+
+                                                    <!-- Actions -->
+                                                    <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                                        <Button Content="Xem" 
+                                                                Background="#2E86AB" Foreground="White"
+                                                                Padding="10,5" Margin="0,0,5,0"
+                                                                Click="ViewProperty_Click"
+                                                                Tag="{Binding Id}"/>
+                                                        <Button Content="Sửa" 
+                                                                Background="#FFC107" Foreground="#333"
+                                                                Padding="10,5" Margin="0,0,5,0"
+                                                                Click="EditProperty_Click"
+                                                                Tag="{Binding Id}"/>
+                                                        <Button Content="Xóa" 
+                                                                Background="#F44336" Foreground="White"
+                                                                Padding="10,5"
+                                                                Click="DeleteProperty_Click"
+                                                                Tag="{Binding Id}"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
                     </StackPanel>
                 </Border>
             </Grid>

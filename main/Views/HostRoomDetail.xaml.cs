@@ -1,135 +1,180 @@
-﻿using System;
+﻿using main.Data;
+using main.Models;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using main.Models;
 
 namespace main.Views
 {
     public partial class HostRoomDetail : UserControl
     {
         private MainWindow _mainWindow;
+        private DatabaseHelper _dbHelper; // Thêm dòng này
         private Property _property;
         private bool _isEditMode = false;
+
+        public ObservableCollection<ImageFile> UploadedImages { get; set; }
 
         public HostRoomDetail(MainWindow mainWindow, Property property, bool isEditMode = false)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            _dbHelper = new DatabaseHelper(); // Thêm dòng này
             _property = property;
             _isEditMode = isEditMode;
+            UploadedImages = new ObservableCollection<ImageFile>();
 
             InitializePage();
-            LoadRoomData();
+            LoadPropertyData();
         }
 
-        private void InitializePage()
+        private void LoadPropertyData()
         {
-            if (_isEditMode)
+            try
             {
-                txtTitle.Text = "Chỉnh sửa phòng";
-                btnEdit.Visibility = Visibility.Collapsed;
-                // TODO: Enable edit mode for controls
+                // Tải lại thông tin chi tiết từ database
+                var detailedProperty = _dbHelper.GetPropertyById(_property.Id);
+                if (detailedProperty != null)
+                {
+                    _property = detailedProperty;
+                }
+
+                // Hiển thị thông tin
+                txtEditTitle.Text = _property.Title;
+                txtEditAddress.Text = _property.Address;
+                txtEditArea.Text = _property.Area.ToString();
+                txtEditPrice.Text = _property.Price.ToString();
+                txtEditDeposit.Text = _property.Deposit.ToString();
+                txtEditDescription.Text = _property.Description;
+                txtViewCount.Text = _property.ViewCount.ToString();
+
+                // Set room type
+                foreach (ComboBoxItem item in cmbEditRoomType.Items)
+                {
+                    if (item.Content.ToString() == _property.RoomType)
+                    {
+                        cmbEditRoomType.SelectedItem = item;
+                        break;
+                    }
+                }
+
+                // Set status
+                if (_property.Status == "Available")
+                    cmbEditStatus.SelectedIndex = 0;
+                else if (_property.Status == "Rented")
+                    cmbEditStatus.SelectedIndex = 1;
+                else
+                    cmbEditStatus.SelectedIndex = 2;
+
+                // Set amenities
+                if (_property.Amenities != null)
+                {
+                    chkEditWiFi.IsChecked = _property.Amenities.Contains("WiFi");
+                    chkEditParking.IsChecked = _property.Amenities.Contains("Chỗ để xe");
+                    chkEditAirCon.IsChecked = _property.Amenities.Contains("Máy lạnh");
+                    chkEditWaterHeater.IsChecked = _property.Amenities.Contains("Nóng lạnh");
+                    chkEditFridge.IsChecked = _property.Amenities.Contains("Tủ lạnh");
+                    chkEditWashing.IsChecked = _property.Amenities.Contains("Máy giặt");
+                    chkEditKitchen.IsChecked = _property.Amenities.Contains("Bếp");
+                    chkEditSecurity.IsChecked = _property.Amenities.Contains("Bảo vệ 24/7");
+                }
+
+                // TODO: Load images
+                // txtFavoriteCount.Text = GetFavoriteCount(_property.Id).ToString();
+                // txtBookingRequests.Text = GetBookingRequestCount(_property.Id).ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải dữ liệu phòng: {ex.Message}", "Lỗi",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void LoadRoomData()
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Load room data from database based on _ID
-            txtDetailTitle.Text = "Phòng 101 - SMI House";
-            txtDetailAddress.Text = "123 Võ Văn Ngân, Phường Linh Chiểu, Thủ Đức, TP.HCM";
-            txtDetailPrice.Text = "5.300.000đ/tháng";
-            txtDetailArea.Text = "30m²";
-            txtDetailStatus.Text = "Trống";
-            borderStatus.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CAF50"));
-            txtDetailDescription.Text = "Phòng trọ mới xây, sạch sẽ, yên tĩnh. Có đầy đủ tiện nghi: máy lạnh, nóng lạnh, wifi. Gần trường đại học, chợ, siêu thị.";
+            if (!ValidateInput())
+                return;
 
-            // Add amenities
-            wrapAmenities.Children.Add(CreateAmenityChip("WiFi"));
-            wrapAmenities.Children.Add(CreateAmenityChip("Chỗ để xe"));
-            wrapAmenities.Children.Add(CreateAmenityChip("Máy lạnh"));
-            wrapAmenities.Children.Add(CreateAmenityChip("Nóng lạnh"));
-
-            // Add sample images
-            for (int i = 1; i <= 4; i++)
+            try
             {
-                imagePanel.Children.Add(CreateImagePlaceholder());
+                // Cập nhật thông tin property
+                _property.Title = txtEditTitle.Text;
+                _property.Address = txtEditAddress.Text;
+                _property.Area = double.Parse(txtEditArea.Text);
+                _property.Price = decimal.Parse(txtEditPrice.Text);
+                _property.Deposit = decimal.Parse(txtEditDeposit.Text);
+                _property.Description = txtEditDescription.Text;
+                _property.RoomType = (cmbEditRoomType.SelectedItem as ComboBoxItem)?.Content.ToString();
+                _property.Status = cmbEditStatus.SelectedIndex == 0 ? "Available" :
+                                 cmbEditStatus.SelectedIndex == 1 ? "Rented" : "Maintenance";
+
+                // Collect amenities
+                var amenities = new List<string>();
+                if (chkEditWiFi.IsChecked == true) amenities.Add("WiFi");
+                if (chkEditParking.IsChecked == true) amenities.Add("Chỗ để xe");
+                if (chkEditAirCon.IsChecked == true) amenities.Add("Máy lạnh");
+                if (chkEditWaterHeater.IsChecked == true) amenities.Add("Nóng lạnh");
+                if (chkEditFridge.IsChecked == true) amenities.Add("Tủ lạnh");
+                if (chkEditWashing.IsChecked == true) amenities.Add("Máy giặt");
+                if (chkEditKitchen.IsChecked == true) amenities.Add("Bếp");
+                if (chkEditSecurity.IsChecked == true) amenities.Add("Bảo vệ 24/7");
+                if (chkEditCamera.IsChecked == true) amenities.Add("Camera an ninh");
+                if (chkEditElevator.IsChecked == true) amenities.Add("Thang máy");
+
+                _property.Amenities = amenities;
+
+                // Lưu vào database
+                bool success = _dbHelper.UpdateProperty(_property);
+
+                if (success)
+                {
+                    MessageBox.Show("Đã lưu thay đổi!", "Thông báo",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    SetEditMode(false);
+                }
+                else
+                {
+                    MessageBox.Show("Không thể lưu thay đổi", "Lỗi",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-        }
-
-        private Border CreateAmenityChip(string text)
-        {
-            return new Border
+            catch (Exception ex)
             {
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E3F2FD")),
-                CornerRadius = new CornerRadius(15),
-                Padding = new Thickness(10, 5, 10, 5),
-                Margin = new Thickness(0, 0, 10, 10),
-                Child = new TextBlock
-                {
-                    Text = text,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1976D2")),
-                    FontSize = 12
-                }
-            };
-        }
-
-        private Border CreateImagePlaceholder()
-        {
-            return new Border
-            {
-                Width = 200,
-                Height = 120,
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8F9FA")),
-                Margin = new Thickness(0, 0, 10, 0),
-                CornerRadius = new CornerRadius(5),
-                Child = new TextBlock
-                {
-                    Text = "Hình ảnh phòng",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Foreground = new SolidColorBrush(Colors.Gray)
-                }
-            };
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToHostMainPage(_property.Host);
-        }
-
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToEditRoomPage(_ID);
+                MessageBox.Show($"Lỗi lưu thay đổi: {ex.Message}", "Lỗi",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show("Bạn có chắc chắn muốn xóa phòng này?", "Xác nhận xóa",
-                MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var result = MessageBox.Show("Bạn có chắc chắn muốn xóa phòng này? Hành động này không thể hoàn tác.",
+                "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes)
             {
-                // TODO: Delete from database
-                MessageBox.Show("Đã xóa phòng!", "Thông báo",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                _mainWindow?.NavigateToHostMainPage();
+                try
+                {
+                    bool success = _dbHelper.DeleteProperty(_property.Id);
+                    if (success)
+                    {
+                        MessageBox.Show("Đã xóa phòng", "Thông báo",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                        // Quay về trang quản lý phòng
+                        var host = GetHostById(_property.HostId); // Cần implement method này
+                        _mainWindow?.NavigateToHostMainPage(host);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không thể xóa phòng", "Lỗi",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi xóa phòng: {ex.Message}", "Lỗi",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-        }
-
-        private void BookButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (dpViewDate.SelectedDate == null)
-            {
-                MessageBox.Show("Vui lòng chọn ngày xem phòng", "Thông báo",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            MessageBox.Show("Đã đặt lịch xem phòng thành công! Chủ nhà sẽ liên hệ với bạn sớm.",
-                "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

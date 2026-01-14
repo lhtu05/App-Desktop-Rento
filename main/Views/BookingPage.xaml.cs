@@ -1,103 +1,148 @@
-﻿using Dapper;
-using main.Data;
+﻿using main.Data;
 using main.Models;
-using Microsoft.Data.SqlClient;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
-
 namespace main.Views
 {
-    /// <summary>
-    /// Interaction logic for BookingPage.xaml
-    /// </summary>
     public partial class BookingPage : UserControl
     {
-        private DatabaseHelper _dbHelper;
         private MainWindow _mainWindow;
-        private int _cityID;
-        public BookingPage(DatabaseHelper dbHelper, MainWindow mainWindow, int cityId)
+        private DatabaseHelper _dbHelper;
+        private Renter _renter;
+        public ObservableCollection<Property> Properties { get; set; }
+
+        public BookingPage(MainWindow mainWindow, Renter renter)
         {
             InitializeComponent();
-            _dbHelper = dbHelper;
             _mainWindow = mainWindow;
-            _cityID = cityId;
-            LoadCitiesAndProperties();
-        }
-       
-        private void LoadCitiesAndProperties()
-        {
-            LoadCities();
-            LoadWards(_cityID);
-            LoadProperties(_cityID, null);
+            _dbHelper = new DatabaseHelper(); // Thêm dòng này
+            _renter = renter;
+            Properties = new ObservableCollection<Property>();
+
+            InitializePage();
+            LoadProperties();
         }
 
-        private void LoadCities()
+        private void LoadProperties()
         {
-            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
+            try
             {
-                var cities = conn.Query<City>("SELECT ID, Name FROM City").ToList();
-                CityComboBox.ItemsSource = cities;
-                CityComboBox.SelectedValuePath = "ID";
-                CityComboBox.DisplayMemberPath = "Name";
-                CityComboBox.SelectedValue = _cityID;
+                Properties.Clear();
+
+                // Lấy tất cả phòng có sẵn
+                var properties = _dbHelper.GetPropertiesByFilter();
+
+                foreach (var property in properties)
+                {
+                    Properties.Add(property);
+                }
+
+                propertyItemsControl.ItemsSource = Properties;
+                txtResultCount.Text = $"Tìm thấy {Properties.Count} phòng";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải dữ liệu: {ex.Message}", "Lỗi",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void LoadWards(int cityID)
+        private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
+            try
             {
-                var wards = conn.Query<Ward>("SELECT ID, Name, CityID FROM Ward WHERE CityID=@CityID", new { CityID = cityID }).ToList();
-                WardComboBox.ItemsSource = wards;
-                WardComboBox.SelectedValuePath = "ID";
-                WardComboBox.DisplayMemberPath = "Name";
+                Properties.Clear();
+
+                // Lấy giá trị filter
+                decimal? minPrice = null;
+                decimal? maxPrice = null;
+                string roomType = null;
+
+                // Xử lý filter theo giá
+                var priceRange = (cmbPriceRange.SelectedItem as ComboBoxItem)?.Content.ToString();
+                switch (priceRange)
+                {
+                    case "Dưới 2 triệu":
+                        maxPrice = 2000000;
+                        break;
+                    case "2-3 triệu":
+                        minPrice = 2000000;
+                        maxPrice = 3000000;
+                        break;
+                    case "3-5 triệu":
+                        minPrice = 3000000;
+                        maxPrice = 5000000;
+                        break;
+                    case "5-7 triệu":
+                        minPrice = 5000000;
+                        maxPrice = 7000000;
+                        break;
+                    case "Trên 7 triệu":
+                        minPrice = 7000000;
+                        break;
+                }
+
+                // Xử lý filter theo loại phòng
+                if (chkRoomType1.IsChecked == true && chkRoomType2.IsChecked == false &&
+                    chkRoomType3.IsChecked == false && chkRoomType4.IsChecked == false)
+                {
+                    roomType = "Phòng trọ";
+                }
+                else if (chkRoomType2.IsChecked == true && chkRoomType1.IsChecked == false &&
+                         chkRoomType3.IsChecked == false && chkRoomType4.IsChecked == false)
+                {
+                    roomType = "Chung cư mini";
+                }
+                // ... xử lý các trường hợp khác
+
+                // Lấy danh sách phòng từ database
+                var properties = _dbHelper.GetPropertiesByFilter(
+                    minPrice: minPrice,
+                    maxPrice: maxPrice,
+                    roomType: roomType
+                );
+
+                foreach (var property in properties)
+                {
+                    Properties.Add(property);
+                }
+
+                propertyItemsControl.ItemsSource = Properties;
+                txtResultCount.Text = $"Tìm thấy {Properties.Count} phòng";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi áp dụng filter: {ex.Message}", "Lỗi",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void LoadProperties(int cityID, int? wardID)
+        private void ViewDetailButton_Click(object sender, RoutedEventArgs e)
         {
-            using (var conn = new SqlConnection(DatabaseHelper.connectionString))
+            var button = sender as Button;
+            if (button?.Tag != null && int.TryParse(button.Tag.ToString(), out int propertyId))
             {
-                string sql = @"
-                SELECT p.ID, p.Title, p.Price, p.Street, p.Address
-                FROM Property p
-                INNER JOIN Ward w ON p.WardID = w.ID
-                WHERE w.CityID = @CityID AND p.Status='AVAILABLE'";
-
-                if (wardID != null)
-                    sql += " AND w.ID = @WardID";
-
-                var properties = conn.Query<Property>(sql, new { CityID = cityID, WardID = wardID }).ToList();
-                PropertyListView.ItemsSource = properties;
+                try
+                {
+                    var property = _dbHelper.GetPropertyById(propertyId);
+                    if (property != null)
+                    {
+                        _mainWindow?.NavigateToRenterRoomDetail(_renter, property);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy thông tin phòng", "Lỗi",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi tải chi tiết phòng: {ex.Message}", "Lỗi",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
-
-        private void CityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CityComboBox.SelectedValue == null) return;
-            int selectedCityID = (int)CityComboBox.SelectedValue;
-            LoadWards(selectedCityID);
-            LoadProperties(selectedCityID, null);
-        }
-
-        private void WardComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (WardComboBox.SelectedValue == null) return;
-            int wardID = (int)WardComboBox.SelectedValue;
-            int cityID = (int)CityComboBox.SelectedValue;
-            LoadProperties(cityID, wardID);
-        }
-
-        private void ViewRoom_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = sender as Button;
-            int ID = (int)btn.Tag;
-
-            e.Handled = true;
-            _mainWindow.NavigateToBookingPage(ID);
-        }
-
-
     }
 }

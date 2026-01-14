@@ -1,88 +1,101 @@
-﻿using System.Collections.ObjectModel;
+﻿using main.Data;
+using main.Models;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using main.Models;
+using System.Windows.Media;
 
 namespace main.Views
 {
     public partial class HostMainPage : UserControl
     {
         private MainWindow _mainWindow;
+        private DatabaseHelper _dbHelper; // Thêm dòng này
         private Host _host;
+        public ObservableCollection<PropertyWithStatus> Properties { get; set; }
 
-        public ObservableCollection<Property> Rooms { get; set; }
-
-        public HostMainPage(Host host, MainWindow mainWindow)
+        public HostMainPage(MainWindow mainWindow, Host host)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            _dbHelper = new DatabaseHelper(); // Thêm dòng này
             _host = host;
-            Rooms = new ObservableCollection<Property>();
-            LoadSampleData();
-            RoomListView.ItemsSource = Rooms;
+            Properties = new ObservableCollection<PropertyWithStatus>();
+
+            InitializePage();
+            LoadProperties();
         }
 
-        private void LoadSampleData()
+        private void LoadProperties()
         {
-            Rooms.Add(new Property
+            try
             {
-                ID = 1,
-                Title = "Phòng 101 - SMI House",
-                Address = "123 Võ Văn Ngân, Thủ Đức",
-                Price = 5300000,
-                Status = "Trống"
-            });
-            Rooms.Add(new Property
+                Properties.Clear();
+
+                // Lấy danh sách phòng của chủ nhà từ database
+                var properties = _dbHelper.GetPropertiesByHostId(_host.Id);
+
+                foreach (var property in properties)
+                {
+                    Properties.Add(new PropertyWithStatus
+                    {
+                        Id = property.Id,
+                        Title = property.Title,
+                        Address = property.Address,
+                        Price = property.Price,
+                        Status = property.Status == "Available" ? "Đang trống" :
+                                property.Status == "Rented" ? "Đang thuê" : "Khác"
+                    });
+                }
+
+                propertyItemsControl.ItemsSource = Properties;
+
+                // Cập nhật thống kê
+                int availableCount = Properties.Count(p => p.Status == "Đang trống");
+                int rentedCount = Properties.Count(p => p.Status == "Đang thuê");
+
+                txtTotalProperties.Text = Properties.Count.ToString();
+                txtAvailableProperties.Text = availableCount.ToString();
+                txtRentedProperties.Text = rentedCount.ToString();
+                txtAverageRating.Text = _host.Rating.ToString("0.0");
+            }
+            catch (Exception ex)
             {
-                ID = 2,
-                Title = "Phòng 201 - Air Apartment",
-                Address = "456 Trường Sơn, Quận 10",
-                Price = 6500000,
-                Status = "Đã thuê"
-            });
-            Rooms.Add(new Property
-            {
-                ID = 3,
-                Title = "Phòng 301 - New House",
-                Address = "789 Tân Sơn, Gò Vấp",
-                Price = 4200000,
-                Status = "Trống"
-            });
+                MessageBox.Show($"Lỗi tải danh sách phòng: {ex.Message}", "Lỗi",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToMainPage();
-        }
-
-        private void AddNewRoom_Click(object sender, RoutedEventArgs e)
-        {
-            _mainWindow?.NavigateToPostPage();
-        }
-
-        private void EditRoom_Click(object sender, RoutedEventArgs e)
-        {
-            //var button = sender as Button;
-            //if (button?.Tag != null && int.TryParse(button.Tag.ToString(), out Property property))
-            //{
-                _mainWindow?.NavigateToHostRoomDetail(property);
-            //}
-        }
-
-        private void DeleteRoom_Click(object sender, RoutedEventArgs e)
+        private void DeleteProperty_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            if (button?.Tag != null && int.TryParse(button.Tag.ToString(), out int ID))
+            if (button?.Tag != null && int.TryParse(button.Tag.ToString(), out int propertyId))
             {
                 var result = MessageBox.Show("Bạn có chắc chắn muốn xóa phòng này?", "Xác nhận xóa",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    // Xóa phòng từ database
-                    MessageBox.Show("Đã xóa phòng!", "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    try
+                    {
+                        bool success = _dbHelper.DeleteProperty(propertyId);
+                        if (success)
+                        {
+                            MessageBox.Show("Đã xóa phòng thành công!", "Thông báo",
+                                MessageBoxButton.OK, MessageBoxImage.Information);
+                            LoadProperties(); // Tải lại danh sách
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không thể xóa phòng", "Lỗi",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Lỗi xóa phòng: {ex.Message}", "Lỗi",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
