@@ -8,24 +8,21 @@ using System.Windows.Media;
 
 namespace main.Views
 {
-    public partial class RenterRoomDetail : UserControl
+    public partial class RoomDetail : UserControl
     {
         private MainWindow _mainWindow;
-        private DatabaseHelper _dbHelper; // Thêm dòng này
-        private Renter _renter;
+        private DatabaseHelper _dbHelper;
         private Property _property;
         private bool _isFavorite = false;
 
-        public RenterRoomDetail(MainWindow mainWindow, DatabaseHelper dbHelper, Renter renter, Property property)
+        public RoomDetail(MainWindow mainWindow, DatabaseHelper dbHelper, Property property)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-            _dbHelper = dbHelper; // Thêm dòng này
-            _renter = renter;
+            _dbHelper = dbHelper; 
             _property = property;
 
             LoadPropertyDetails();
-            CheckFavoriteStatus();
         }
 
         private void LoadPropertyDetails()
@@ -62,98 +59,10 @@ namespace main.Views
             }
         }
 
-        private void CheckFavoriteStatus()
-        {
-            try
-            {
-                _isFavorite = _dbHelper.IsPropertyFavorited(_property.ID, _renter.ID);
-                UpdateFavoriteButton();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi kiểm tra trạng thái yêu thích: {ex.Message}", "Lỗi",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void UpdateFavoriteButton()
-        {
-            btnFavorite.Content = _isFavorite ? "Đã yêu thích" : "Yêu thích";
-            btnFavorite.Background = _isFavorite ?
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6B6B")) :
-                new SolidColorBrush(Colors.White);
-        }
-
-        private void FavoriteButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                bool success = _dbHelper.ToggleFavorite(_property.ID, _renter.ID);
-                if (success)
-                {
-                    _isFavorite = !_isFavorite;
-                    UpdateFavoriteButton();
-
-                    string message = _isFavorite ?
-                        "Đã thêm vào danh sách yêu thích" :
-                        "Đã xóa khỏi danh sách yêu thích";
-                    MessageBox.Show(message, "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Không thể cập nhật trạng thái yêu thích", "Lỗi",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi cập nhật yêu thích: {ex.Message}", "Lỗi",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
         private void BookButton_Click(object sender, RoutedEventArgs e)
         {
-            if (dpViewDate.SelectedDate == null)
-            {
-                MessageBox.Show("Vui lòng chọn ngày xem phòng", "Thông báo",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                string viewTime = (cmbViewTime.SelectedItem as ComboBoxItem)?.Content.ToString();
-                string note = txtNote.Text;
-
-                bool success = _dbHelper.CreateBookingRequest(
-                    _property.ID,
-                    _renter.ID,
-                    dpViewDate.SelectedDate.Value,
-                    viewTime,
-                    note
-                );
-
-                if (success)
-                {
-                    MessageBox.Show("Đã gửi yêu cầu đặt lịch xem phòng! Chủ nhà sẽ liên hệ với bạn sớm.",
-                        "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    // Reset form
-                    txtNote.Text = "";
-                }
-                else
-                {
-                    MessageBox.Show("Không thể gửi yêu cầu đặt lịch", "Lỗi",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi đặt lịch xem phòng: {ex.Message}", "Lỗi",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            e.Handled = true;
+            _mainWindow?.NavigateToLoginPage();
         }
     }
 

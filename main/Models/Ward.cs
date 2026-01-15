@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace main.Models
 {
-    class Ward
+    public class Ward
     {
         public int ID { get; set; }
-        public int CityID { get; set; }
+        public City City { get; set; }
         public string Name { get; set; }
     }
 }

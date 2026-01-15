@@ -237,8 +237,7 @@ namespace main.Data
         }
 
         // Property methods
-        public List<Property> GetPropertiesByFilter(string city = null, decimal? minPrice = null,
-            decimal? maxPrice = null, string roomType = null, List<string> amenities = null)
+        public List<Property> GetPropertiesByFilter(string city = null, decimal? minPrice = null, decimal? maxPrice = null, string roomType = null, List<string> amenities = null)
         {
             var properties = new List<Property>();
 
@@ -287,14 +286,24 @@ namespace main.Data
                 {
                     properties.Add(new Property
                     {
-                        Id = (int)reader["PropertyID"],
-                        HostId = (int)reader["HostId"],
+                        ID = (int)reader["PropertyID"],
+                        Host = new Host 
+                        {
+                            ID = (int)reader["HostID"],
+                            FullName = reader["HostName"].ToString(),
+                            PhoneNumber = reader["HostPhone"].ToString(),
+                        },
                         Title = reader["Title"].ToString(),
                         Address = reader["Address"].ToString(),
-                        City = reader["City"].ToString(),
-                        District = reader["District"].ToString(),
-                        Price = (decimal)reader["Price"],
-                        Deposit = (decimal)reader["Deposit"],
+                        Ward = new Ward
+                        {
+                            City = new City
+                            {
+                                Name = reader["City"].ToString(),
+                            }
+                        },
+                        Price = (ulong)reader["Price"],
+                        Deposit = (ulong)reader["Deposit"],
                         Area = (double)reader["Area"],
                         RoomType = reader["RoomType"].ToString(),
                         Capacity = (int)reader["Capacity"],
@@ -302,8 +311,7 @@ namespace main.Data
                         Status = reader["Status"].ToString(),
                         PostedDate = (DateTime)reader["PostedDate"],
                         ViewCount = (int)reader["ViewCount"],
-                        HostName = reader["HostName"].ToString(),
-                        HostPhone = reader["HostPhone"].ToString()
+                        
                     });
                 }
             }
@@ -333,14 +341,25 @@ namespace main.Data
                 {
                     property = new Property
                     {
-                        Id = (int)reader["PropertyID"],
-                        HostId = (int)reader["HostId"],
+                        ID = (int)reader["PropertyID"],
+                        Host = new Host
+                        {
+                            ID = (int)reader["HostID"],
+                            FullName = reader["HostName"].ToString(),
+                            PhoneNumber = reader["HostPhone"].ToString(),
+                            Email = reader["HostEmail"].ToString(),
+                        },
                         Title = reader["Title"].ToString(),
                         Address = reader["Address"].ToString(),
-                        City = reader["City"].ToString(),
-                        District = reader["District"].ToString(),
-                        Price = (decimal)reader["Price"],
-                        Deposit = (decimal)reader["Deposit"],
+                        Ward = new Ward
+                        {
+                            City = new City
+                            {
+                                Name = reader["City"].ToString(),
+                            }
+                        },
+                        Price = (ulong)reader["Price"],
+                        Deposit = (ulong)reader["Deposit"],
                         Area = (double)reader["Area"],
                         RoomType = reader["RoomType"].ToString(),
                         Capacity = (int)reader["Capacity"],
@@ -348,10 +367,7 @@ namespace main.Data
                         Status = reader["Status"].ToString(),
                         PostedDate = (DateTime)reader["PostedDate"],
                         UpdatedDate = (DateTime)reader["UpdatedDate"],
-                        ViewCount = (int)reader["ViewCount"],
-                        HostName = reader["HostName"].ToString(),
-                        HostPhone = reader["HostPhone"].ToString(),
-                        HostEmail = reader["HostEmail"].ToString()
+                        ViewCount = (int)reader["ViewCount"]
                     };
 
                     // Tăng lượt xem
@@ -455,12 +471,24 @@ namespace main.Data
                 {
                     properties.Add(new Property
                     {
-                        Id = (int)reader["PropertyID"],
-                        HostId = (int)reader["HostId"],
+                        ID = (int)reader["PropertyID"],
+                        Host = new Host
+                        {
+                            ID = (int)reader["HostID"],
+                            FullName = reader["HostName"].ToString(),
+                            PhoneNumber = reader["HostPhone"].ToString(),
+                        },
                         Title = reader["Title"].ToString(),
                         Address = reader["Address"].ToString(),
-                        Price = (decimal)reader["Price"],
-                        Deposit = (decimal)reader["Deposit"],
+                        Ward = new Ward
+                        {
+                            City = new City
+                            {
+                                Name = reader["City"].ToString(),
+                            }
+                        },
+                        Price = (ulong)reader["Price"],
+                        Deposit = (ulong)reader["Deposit"],
                         Area = (double)reader["Area"],
                         RoomType = reader["RoomType"].ToString(),
                         Status = reader["Status"].ToString(),
@@ -480,19 +508,18 @@ namespace main.Data
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 string query = @"INSERT INTO Properties 
-                               (HostId, Title, Address, City, District, Price, Deposit, 
+                               (HostId, Title, Address, City, Price, Deposit, 
                                 Area, RoomType, Capacity, Description, Status, PostedDate)
                                OUTPUT INSERTED.PropertyID
-                               VALUES (@HostId, @Title, @Address, @City, @District, @Price, 
+                               VALUES (@HostId, @Title, @Address, @City, @Price, 
                                        @Deposit, @Area, @RoomType, @Capacity, @Description, 
                                        'Available', @PostedDate)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@HostId", property.HostId);
+                cmd.Parameters.AddWithValue("@HostId", property.Host.ID);
                 cmd.Parameters.AddWithValue("@Title", property.Title);
                 cmd.Parameters.AddWithValue("@Address", property.Address);
-                cmd.Parameters.AddWithValue("@City", property.City);
-                cmd.Parameters.AddWithValue("@District", property.District);
+                cmd.Parameters.AddWithValue("@City", property.Ward.City);
                 cmd.Parameters.AddWithValue("@Price", property.Price);
                 cmd.Parameters.AddWithValue("@Deposit", property.Deposit);
                 cmd.Parameters.AddWithValue("@Area", property.Area);
@@ -522,7 +549,6 @@ namespace main.Data
                                Title = @Title,
                                Address = @Address,
                                City = @City,
-                               District = @District,
                                Price = @Price,
                                Deposit = @Deposit,
                                Area = @Area,
@@ -534,11 +560,10 @@ namespace main.Data
                                WHERE PropertyID = @PropertyID";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@PropertyID", property.Id);
+                cmd.Parameters.AddWithValue("@PropertyID", property.ID);
                 cmd.Parameters.AddWithValue("@Title", property.Title);
                 cmd.Parameters.AddWithValue("@Address", property.Address);
-                cmd.Parameters.AddWithValue("@City", property.City);
-                cmd.Parameters.AddWithValue("@District", property.District);
+                cmd.Parameters.AddWithValue("@City", property.Ward.City);
                 cmd.Parameters.AddWithValue("@Price", property.Price);
                 cmd.Parameters.AddWithValue("@Deposit", property.Deposit);
                 cmd.Parameters.AddWithValue("@Area", property.Area);
@@ -552,7 +577,7 @@ namespace main.Data
                 int result = cmd.ExecuteNonQuery();
 
                 // Update amenities
-                UpdatePropertyAmenities(property.Id, property.Amenities);
+                UpdatePropertyAmenities(property.ID, property.Amenities);
 
                 return result > 0;
             }

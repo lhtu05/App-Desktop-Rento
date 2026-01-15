@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using main.Models;
+using main.Data;
 
 namespace main.Views
 {
@@ -10,6 +11,7 @@ namespace main.Views
     {
         private MainWindow _mainWindow;
         private Host _host;
+        private DatabaseHelper _dbHelper;
         private int _currentStep = 1;
 
         public ObservableCollection<UploadedImage> UploadedImages { get; set; }
@@ -21,11 +23,12 @@ namespace main.Views
             public long FileSize { get; set; } // in bytes
         }
 
-        public PostPage(MainWindow mainWindow, Host host)
+        public PostPage(DatabaseHelper dbHelper, MainWindow mainWindow, Host host)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
             _host = host;
+            _dbHelper = dbHelper;
             UploadedImages = new ObservableCollection<UploadedImage>();
 
             InitializePage();
@@ -132,7 +135,7 @@ namespace main.Views
             var newProperty = CreatePropertyFromForm();
 
             // TODO: Save property to database
-            // newProperty.HostId = _host.Id;
+            // newProperty.HostId = _host.ID;
             // SaveToDatabase(newProperty);
 
             MessageBox.Show("Đăng phòng thành công! Phòng của bạn đang được duyệt.",

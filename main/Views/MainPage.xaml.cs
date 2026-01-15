@@ -36,22 +36,24 @@ namespace main.Views
             _mainWindow?.NavigateToLoginPage();
         }
 
-        private void NavigateToPostPage(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            _mainWindow?.NavigateToPostPage();
-        }
-
         private void HNButton_Click(object sender, RoutedEventArgs e)
         {
+            City city = new City
+            {
+                ID = 1,
+            };
             e.Handled = true;
-            _mainWindow.NavigateToBookingPage(1); 
+            _mainWindow.NavigateToRoomList(city); 
         }
 
         private void TPHCMButton_Click(object sender, RoutedEventArgs e)
         {
+            City city = new City
+            {
+                ID = 28,
+            };
             e.Handled = true;
-            _mainWindow.NavigateToBookingPage(2);
+            _mainWindow.NavigateToRoomList(city);
         }
 
 

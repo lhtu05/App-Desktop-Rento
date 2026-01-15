@@ -1,6 +1,8 @@
 ﻿using main.Data;
 using main.Models;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,22 +11,20 @@ namespace main.Views
     public partial class HostRoomDetail : UserControl
     {
         private MainWindow _mainWindow;
-        private DatabaseHelper _dbHelper; // Thêm dòng này
+        private DatabaseHelper _dbHelper;
         private Property _property;
         private bool _isEditMode = false;
+        private ObservableCollection<PropertyImage> _images = new ObservableCollection<PropertyImage>();
 
-        public ObservableCollection<ImageFile> UploadedImages { get; set; }
-
-        public HostRoomDetail(MainWindow mainWindow, Property property, bool isEditMode = false)
+        public HostRoomDetail(MainWindow mainWindow, DatabaseHelper dbHelper, Property property, bool isEditMode = false)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-            _dbHelper = new DatabaseHelper(); // Thêm dòng này
+            _dbHelper = dbHelper;
             _property = property;
             _isEditMode = isEditMode;
-            UploadedImages = new ObservableCollection<ImageFile>();
+            imageListControl.ItemsSource = _images;
 
-            InitializePage();
             LoadPropertyData();
         }
 
@@ -33,7 +33,7 @@ namespace main.Views
             try
             {
                 // Tải lại thông tin chi tiết từ database
-                var detailedProperty = _dbHelper.GetPropertyById(_property.Id);
+                var detailedProperty = _dbHelper.GetPropertyById(_property.ID);
                 if (detailedProperty != null)
                 {
                     _property = detailedProperty;
@@ -80,8 +80,8 @@ namespace main.Views
                 }
 
                 // TODO: Load images
-                // txtFavoriteCount.Text = GetFavoriteCount(_property.Id).ToString();
-                // txtBookingRequests.Text = GetBookingRequestCount(_property.Id).ToString();
+                // txtFavoriteCount.Text = GetFavoriteCount(_property.ID).ToString();
+                // txtBookingRequests.Text = GetBookingRequestCount(_property.ID).ToString();
             }
             catch (Exception ex)
             {
@@ -92,17 +92,14 @@ namespace main.Views
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidateInput())
-                return;
-
             try
             {
                 // Cập nhật thông tin property
                 _property.Title = txtEditTitle.Text;
                 _property.Address = txtEditAddress.Text;
                 _property.Area = double.Parse(txtEditArea.Text);
-                _property.Price = decimal.Parse(txtEditPrice.Text);
-                _property.Deposit = decimal.Parse(txtEditDeposit.Text);
+                _property.Price = ulong.Parse(txtEditPrice.Text);
+                _property.Deposit = ulong.Parse(txtEditDeposit.Text);
                 _property.Description = txtEditDescription.Text;
                 _property.RoomType = (cmbEditRoomType.SelectedItem as ComboBoxItem)?.Content.ToString();
                 _property.Status = cmbEditStatus.SelectedIndex == 0 ? "Available" :
@@ -130,7 +127,6 @@ namespace main.Views
                 {
                     MessageBox.Show("Đã lưu thay đổi!", "Thông báo",
                         MessageBoxButton.OK, MessageBoxImage.Information);
-                    SetEditMode(false);
                 }
                 else
                 {
@@ -154,14 +150,13 @@ namespace main.Views
             {
                 try
                 {
-                    bool success = _dbHelper.DeleteProperty(_property.Id);
+                    bool success = _dbHelper.DeleteProperty(_property.ID);
                     if (success)
                     {
                         MessageBox.Show("Đã xóa phòng", "Thông báo",
                             MessageBoxButton.OK, MessageBoxImage.Information);
                         // Quay về trang quản lý phòng
-                        var host = GetHostById(_property.HostId); // Cần implement method này
-                        _mainWindow?.NavigateToHostMainPage(host);
+                        _mainWindow?.NavigateToHostMainPage(_property.Host);
                     }
                     else
                     {
@@ -176,5 +171,54 @@ namespace main.Views
                 }
             }
         }
+
+        private void NavigateToHostMainPage(object sender, RoutedEventArgs e)
+        {
+            Property property = new Property();
+            e.Handled = true;
+            _mainWindow?.NavigateToHostMainPage(property.Host);
+        }
+
+        private void UploadImages_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp",
+                Multiselect = true
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            // Giới hạn số lượng
+            if (_images.Count + dialog.FileNames.Length > 10)
+            {
+                MessageBox.Show("Chỉ được tối đa 10 hình ảnh.");
+                return;
+            }
+
+            foreach (var filePath in dialog.FileNames)
+            {
+                FileInfo fileInfo = new FileInfo(filePath);
+
+                // Giới hạn dung lượng (5MB)
+                if (fileInfo.Length > 5 * 1024 * 1024)
+                {
+                    MessageBox.Show($"Ảnh {fileInfo.Name} vượt quá 5MB.");
+                    continue;
+                }
+
+                // Tránh trùng tên
+                if (_images.Any(i => i.FileName == fileInfo.Name))
+                    continue;
+
+                _images.Add(new ImageItem
+                {
+                    FileName = fileInfo.Name,
+                    FilePath = filePath
+                });
+            }
+        }
+
     }
 }

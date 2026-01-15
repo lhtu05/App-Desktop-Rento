@@ -3,7 +3,6 @@ using main.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace main.Views
 {
@@ -12,17 +11,16 @@ namespace main.Views
         private MainWindow _mainWindow;
         private DatabaseHelper _dbHelper; // Thêm dòng này
         private Host _host;
-        public ObservableCollection<PropertyWithStatus> Properties { get; set; }
+        public ObservableCollection<Property> Properties { get; set; }
 
-        public HostMainPage(MainWindow mainWindow, Host host)
+        public HostMainPage(MainWindow mainWindow, DatabaseHelper dbHelper, Host host)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-            _dbHelper = new DatabaseHelper(); // Thêm dòng này
+            _dbHelper = dbHelper;
             _host = host;
-            Properties = new ObservableCollection<PropertyWithStatus>();
+            Properties = new ObservableCollection<Property>();
 
-            InitializePage();
             LoadProperties();
         }
 
@@ -33,13 +31,13 @@ namespace main.Views
                 Properties.Clear();
 
                 // Lấy danh sách phòng của chủ nhà từ database
-                var properties = _dbHelper.GetPropertiesByHostId(_host.Id);
+                var properties = _dbHelper.GetPropertiesByHostId(_host.ID);
 
                 foreach (var property in properties)
                 {
-                    Properties.Add(new PropertyWithStatus
+                    Properties.Add(new Property
                     {
-                        Id = property.Id,
+                        ID = property.ID,
                         Title = property.Title,
                         Address = property.Address,
                         Price = property.Price,
@@ -98,6 +96,17 @@ namespace main.Views
                     }
                 }
             }
+        }
+        private void NavigateToPostPage(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow?.NavigateToPostPage(_host);
+        }
+        private void NavigateToHostRoomDetail(object sender, RoutedEventArgs e)
+        {
+            Property property = new Property();
+            e.Handled = true;
+            _mainWindow?.NavigateToHostRoomDetail(property);
         }
     }
 }

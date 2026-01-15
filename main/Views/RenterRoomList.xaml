@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="main.Views.BookingPage"
+﻿<UserControl x:Class="main.Views.RenterRoomList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -181,7 +181,7 @@
                                                             Background="#2E86AB" Foreground="White"
                                                             Padding="15,8" FontSize="14"
                                                             Click="ViewDetailButton_Click"
-                                                            Tag="{Binding Id}"/>
+                                                            Tag="{Binding ID}"/>
                                                 </StackPanel>
                                             </Grid>
                                         </Border>

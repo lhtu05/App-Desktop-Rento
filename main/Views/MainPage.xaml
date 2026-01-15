@@ -50,239 +50,210 @@
             </Border>
 
             <!-- Main Content -->
-            <Grid Margin="0,70,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <Border Margin="0,70,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="340"/>
+                        <!-- Hero -->
+                        <RowDefinition Height="*"/>
+                        <!-- Content -->
+                    </Grid.RowDefinitions>
 
-                <!-- Hero Section -->
-                <Border Grid.Row="0" Background="White" Padding="40,30">
-                    <StackPanel>
-                        <TextBlock Text="Tìm phòng thông minh" 
-                                  FontSize="28" FontWeight="Bold" Foreground="#2E86AB" 
-                                  TextWrapping="Wrap" Margin="0,0,0,15" HorizontalAlignment="Center"/>
+                    <!-- HERO SECTION -->
+                    <Grid Grid.Row="0">
+                        <!-- Ảnh nền -->
+                        <Image Source="Assets/hero.png"
+                            Stretch="UniformToFill"/>
+                        <!-- Overlay mờ -->
+                        <Border Background="#80000000"/>
+                        <!-- Nội dung trên ảnh -->
+                        <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Width="700">
 
-                        <!-- Search Bar -->
-                        <Border Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1" 
-                                CornerRadius="25" Padding="15" Margin="0,0,0,20">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Tìm theo tên khu vực, trường, tên nhà" 
-                                          Foreground="#9E9E9E" VerticalAlignment="Center"/>
-                                <Button Background="#2E86AB" BorderThickness="0" Padding="20,10" 
-                                        Grid.ColumnSpan="2" Height="40" 
-                                        Margin="1700,0,0,0">
-                                    <TextBlock Text="Tìm kiếm" Foreground="White"
-                                               FontSize="16" FontWeight="SemiBold"/>
-                                </Button>
-                            </Grid>
-                        </Border>
+                            <TextBlock Text="Tìm phòng thông minh,"
+                        FontSize="32"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        TextAlignment="Center"/>
 
-                        <!-- Filter Section -->
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <TextBlock Text="Thời gian:" FontWeight="SemiBold" 
-                                      VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="chốn về cực xinh"
+                        FontSize="32"
+                        Foreground="#2ED1C3"
+                        FontWeight="Bold"
+                        TextAlignment="Center"
+                        Margin="0,0,0,20"/>
 
-                            <ComboBox Width="120" Margin="0,0,20,0" SelectedIndex="0">
-                                <ComboBoxItem Content="Gia phòng"/>
-                                <ComboBoxItem Content="Mới nhất"/>
-                                <ComboBoxItem Content="Cũ nhất"/>
-                            </ComboBox>
+                            <!-- Thanh tìm kiếm -->
+                            <Border CornerRadius="16" Background="White" Padding="12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Diện tích:" FontWeight="SemiBold" 
-                                      VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBox Height="40"
+                                     VerticalContentAlignment="Center"
+                                     FontSize="14"
+                                     Text="Tìm theo khu vực, trường, tòa nhà"/>
 
-                            <ComboBox Width="120" Margin="0,0,20,0" SelectedIndex="0">
-                                <ComboBoxItem Content="Tất cả"/>
-                                <ComboBoxItem Content="Dưới 20m²"/>
-                                <ComboBoxItem Content="20-30m²"/>
-                                <ComboBoxItem Content="Trên 30m²"/>
-                            </ComboBox>
-
-                            <TextBlock Text="Loại phòng:" FontWeight="SemiBold" 
-                                      VerticalAlignment="Center" Margin="0,0,10,0"/>
-
-                            <ComboBox Width="120" Margin="0,0,20,0" SelectedIndex="0">
-                                <ComboBoxItem Content="Tất cả"/>
-                                <ComboBoxItem Content="Phòng trọ"/>
-                                <ComboBoxItem Content="Chung cư mini"/>
-                                <ComboBoxItem Content="Nhà nguyên căn"/>
-                            </ComboBox>
-
-                            <Button x:Name="HN_btn"
-                                    Content="Hà Nội"
-                                    Click="HNButton_Click">
-
-                            </Button>
-
-                            <Button x:Name="TPHCM_btn"
-                                     Content="TP HCM"
-                                     Click="TPHCMButton_Click"
-                                    Margin="20 0 0 0">
-
-                            </Button>
+                                    <Button Grid.Column="1"
+                                     Content="🔍"
+                                     Width="50"
+                                     Margin="8,0,0,0"/>
+                                </Grid>
+                            </Border>
                         </StackPanel>
-                    </StackPanel>
-                </Border>
+                    </Grid>
 
-                <!-- Bài đăng Section -->
-                <Border Grid.Row="1" Background="White" Padding="30">
-                    <StackPanel>
-                        <TextBlock Text="Bài đăng" FontSize="20" FontWeight="Bold" 
-                                  Foreground="#2E86AB" Margin="0,0,0,20"/>
+
+                    <!-- Bài đăng Section -->
+                    <StackPanel Grid.Row="1" Margin="40">
+                        <DockPanel Margin="0,0,0,16">
+                            <TextBlock Text="Tòa nhà có phòng bán chạy"
+                               FontSize="22"
+                               FontWeight="SemiBold"
+                               DockPanel.Dock="Left"/>
+
+                            <TextBlock Text="Xem tất cả >"
+                               Foreground="#2ED1C3"
+                               Cursor="Hand"
+                               DockPanel.Dock="Right"/> 
+                        </DockPanel>
+
 
                         <!-- Horizontal Scroll for Property Cards -->
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"
-                                      Height="200">
-                            <StackPanel Orientation="Horizontal">
-                                <!-- Property Card 1 -->
-                                <Border Width="280" Background="#F8F9FA" BorderBrush="#E0E0E0" 
-                                        BorderThickness="1" CornerRadius="10" Margin="0,0,15,0">
-                                    <StackPanel Margin="15">
-                                        <TextBlock Text="SMI House Võ Văn Ngân - Thủ Đức" 
-                                                  FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 2 phòng trống" 
-                                                  Foreground="#FF6B6B" FontSize="12" Margin="0,0,0,10"/>
-                                        <TextBlock Text="5.300.000đ" FontSize="16" FontWeight="Bold" 
-                                                  Foreground="#2E86AB"/>
-                                    </StackPanel>
-                                </Border>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding Rooms}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
 
-                                <!-- Property Card 2 -->
-                                <Border Width="280" Background="#F8F9FA" BorderBrush="#E0E0E0" 
-                                        BorderThickness="1" CornerRadius="10" Margin="0,0,15,0">
-                                    <StackPanel Margin="15">
-                                        <TextBlock Text="Air Apartment Trường Sơn - Quận 10" 
-                                                  FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 1 phòng trống" 
-                                                  Foreground="#FF6B6B" FontSize="12" Margin="0,0,0,10"/>
-                                        <TextBlock Text="6.500.000đ" FontSize="16" FontWeight="Bold" 
-                                                  Foreground="#2E86AB"/>
-                                    </StackPanel>
-                                </Border>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="220"
+                                        Margin="0,0,16,0"
+                                        CornerRadius="12"
+                                        Background="White"
+                                        Padding="8">
 
-                                <!-- Property Card 3 -->
-                                <Border Width="280" Background="#F8F9FA" BorderBrush="#E0E0E0" 
-                                        BorderThickness="1" CornerRadius="10" Margin="0,0,15,0">
-                                    <StackPanel Margin="15">
-                                        <TextBlock Text="New House Tân Sơn - Gò Vấp" 
-                                                  FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 1 phòng trống" 
-                                                  Foreground="#FF6B6B" FontSize="12" Margin="0,0,0,10"/>
-                                        <TextBlock Text="4.200.000đ" FontSize="16" FontWeight="Bold" 
-                                                  Foreground="#2E86AB"/>
-                                    </StackPanel>
-                                </Border>
+                                            <StackPanel>
+                                                <Image Source="{Binding Image}"
+                                               Height="120"
+                                               Stretch="UniformToFill"
+                                               ClipToBounds="True"/>
 
-                                <!-- Property Card 4 -->
-                                <Border Width="280" Background="#F8F9FA" BorderBrush="#E0E0E0" 
-                                        BorderThickness="1" CornerRadius="10" Margin="0,0,15,0">
-                                    <StackPanel Margin="15">
-                                        <TextBlock Text="NT House Đường 6/39 - Gò Vấp" 
-                                                  FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 1 phòng trống" 
-                                                  Foreground="#FF6B6B" FontSize="12" Margin="0,0,0,10"/>
-                                        <TextBlock Text="3.600.000đ" FontSize="16" FontWeight="Bold" 
-                                                  Foreground="#2E86AB"/>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
+                                                <TextBlock Text="{Binding Name}"
+                                               FontWeight="SemiBold"
+                                               Margin="0,8,0,0"/>
+
+                                                <TextBlock Text="{Binding Address}"
+                                               FontSize="12"
+                                               Foreground="Gray"/>
+
+                                                <TextBlock Text="{Binding Price}"
+                                               Foreground="#2ED1C3"
+                                               FontWeight="Bold"
+                                               Margin="0,8,0,0"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </ScrollViewer>
                     </StackPanel>
-                </Border>
 
-                <!-- Tòa nhà có phòng bán chạy Section -->
-                <Border Grid.Row="2" Background="White" Padding="30">
-                    <StackPanel>
-                        <TextBlock Text="Tòa nhà có phòng bán chạy" FontSize="20" FontWeight="Bold" 
+                    <!-- Tòa nhà có phòng bán chạy Section -->
+                    <Border Grid.Row="2" Background="White" Padding="30">
+                        <StackPanel>
+                            <TextBlock Text="Tòa nhà có phòng bán chạy" FontSize="20" FontWeight="Bold" 
                                   Foreground="#2E86AB" Margin="0,0,0,20"/>
 
-                        <!-- Popular Buildings List -->
-                        <StackPanel>
-                            <!-- Building 1 -->
-                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="SMI House Võ Văn Ngân - Thủ Đức" 
+                            <!-- Popular Buildings List -->
+                            <StackPanel>
+                                <!-- Building 1 -->
+                                <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="SMI House Võ Văn Ngân - Thủ Đức" 
                                                   FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 2 phòng trống" 
+                                            <TextBlock Text="Chỉ còn 2 phòng trống" 
                                                   Foreground="#FF6B6B" FontSize="12"/>
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="1" Text="5.300.000đ" 
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" Text="5.300.000đ" 
                                               FontSize="16" FontWeight="Bold" Foreground="#2E86AB"
                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
+                                    </Grid>
+                                </Border>
 
-                            <!-- Building 2 -->
-                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="Air Apartment Trường Sơn - Quận 10" 
+                                <!-- Building 2 -->
+                                <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="Air Apartment Trường Sơn - Quận 10" 
                                                   FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 1 phòng trống" 
+                                            <TextBlock Text="Chỉ còn 1 phòng trống" 
                                                   Foreground="#FF6B6B" FontSize="12"/>
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="1" Text="6.500.000đ" 
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" Text="6.500.000đ" 
                                               FontSize="16" FontWeight="Bold" Foreground="#2E86AB"
                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
+                                    </Grid>
+                                </Border>
 
-                            <!-- Building 3 -->
-                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="New House Tân Sơn - Gò Vấp" 
+                                <!-- Building 3 -->
+                                <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="New House Tân Sơn - Gò Vấp" 
                                                   FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 1 phòng trống" 
+                                            <TextBlock Text="Chỉ còn 1 phòng trống" 
                                                   Foreground="#FF6B6B" FontSize="12"/>
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="1" Text="4.200.000đ" 
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" Text="4.200.000đ" 
                                               FontSize="16" FontWeight="Bold" Foreground="#2E86AB"
                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
+                                    </Grid>
+                                </Border>
 
-                            <!-- Building 4 -->
-                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="NT House Đường 6/39 - Gò Vấp" 
+                                <!-- Building 4 -->
+                                <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,0,0,15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="NT House Đường 6/39 - Gò Vấp" 
                                                   FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                        <TextBlock Text="Chỉ còn 1 phòng trống" 
+                                            <TextBlock Text="Chỉ còn 1 phòng trống" 
                                                   Foreground="#FF6B6B" FontSize="12"/>
-                                    </StackPanel>
-                                    <TextBlock Grid.Column="1" Text="3.600.000đ" 
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" Text="3.600.000đ" 
                                               FontSize="16" FontWeight="Bold" Foreground="#2E86AB"
                                               VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </Border>
-            </Grid>
+                    </Border>
+                </Grid>
+            </Border>
         </Grid>
     </ScrollViewer>
 </UserControl>

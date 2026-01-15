@@ -16,7 +16,7 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 Foreground="White" Margin="20,0,0,0"
-                                Click="BackButton_Click">
+                                Click="NavigateToHostMainPage">
                             <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
                         </Button>
                         <TextBlock x:Name="txtHeaderTitle" Text="Chi tiết phòng" 
@@ -25,11 +25,6 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
-                        <Button x:Name="btnEditMode" Content="Chỉnh sửa" 
-                                Background="#FFC107" Foreground="#333"
-                                Padding="15,8" Margin="0,0,10,0"
-                                FontSize="14" FontWeight="SemiBold"
-                                Click="EditModeButton_Click"/>
                         <Button Content="Lưu thay đổi" 
                                 Background="#4CAF50" Foreground="White"
                                 Padding="15,8" FontSize="14" FontWeight="SemiBold"
@@ -39,7 +34,7 @@
             </Border>
 
             <!-- Main Content -->
-            <Grid Margin="0,70,0,0" Padding="20">
+            <Grid Margin="0,70,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
@@ -246,7 +241,7 @@
                             <TextBlock Text="Hình ảnh" FontSize="18" FontWeight="Bold" 
                                       Foreground="#2E86AB" Margin="0,0,0,15"/>
 
-                            <Border BorderBrush="#E0E0E0" BorderThickness="2" 
+                            <Border BorderBrush="#E0E0E0" 
                                     BorderThickness="2" CornerRadius="5" 
                                     Background="#F8F9FA" Padding="20">
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

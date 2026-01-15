@@ -6,22 +6,23 @@ using System.Windows.Controls;
 
 namespace main.Views
 {
-    public partial class BookingPage : UserControl
+    public partial class RenterRoomList : UserControl
     {
         private MainWindow _mainWindow;
         private DatabaseHelper _dbHelper;
         private Renter _renter;
+        private City _city;
         public ObservableCollection<Property> Properties { get; set; }
 
-        public BookingPage(MainWindow mainWindow, Renter renter)
+        public RenterRoomList(MainWindow mainWindow, DatabaseHelper dbHelper, Renter renter, City city)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-            _dbHelper = new DatabaseHelper(); // Thêm dòng này
+            _dbHelper = dbHelper;
             _renter = renter;
+            _city = city;
             Properties = new ObservableCollection<Property>();
 
-            InitializePage();
             LoadProperties();
         }
 

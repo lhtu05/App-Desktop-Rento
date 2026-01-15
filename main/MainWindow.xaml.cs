@@ -29,6 +29,16 @@ namespace main
             var mainPage = new MainPage(this);
             MainFrame.Navigate(mainPage);
         }
+        public void NavigateToRoomList(City city)
+        {
+            var RoomList = new RoomList(this, dbHelper, city);
+            MainFrame.Navigate(RoomList);
+        }
+        public void NavigateToRoomDetail(Property property)
+        {
+            var roomDetail = new RoomDetail(this, dbHelper, property);
+            MainFrame.Navigate(roomDetail);
+        }
 
         // Phương thức điều hướng đến trang đăng nhập
         public void NavigateToLoginPage()
@@ -37,51 +47,52 @@ namespace main
             MainFrame.Navigate(loginPage);
         }
 
-        public void NavigateToPostPage()
-        {
-            var postPage = new PostPage(dbHelper, this);
-            MainFrame.Navigate(postPage);
-        }
-
-
-        // Phương thức điều hướng đến trang đăng ký
+        // Phương thức điều hướng đến những trang cho người thuê
         public void NavigateToRenterRegisterPage()
         {
             var RenterRegisterPage = new RenterRegisterPage(dbHelper, this);
             MainFrame.Navigate(RenterRegisterPage);
         }
+
+        public void NavigateToRenterMainPage(Renter renter)
+        {
+            var renterMainPage = new RenterMainPage(renter, this);
+            MainFrame.Navigate(renterMainPage);
+        }
+        public void NavigateToRenterRoomList(Renter renter, City city)
+        {
+            var RenterRoomList = new RenterRoomList(this, dbHelper, renter, city);
+            MainFrame.Navigate(RenterRoomList);
+        }
+
+        public void NavigateToRenterRoomDetail(Renter renter, Property property)
+        {
+            var renterRoomDetail = new RenterRoomDetail(this, dbHelper, renter, property);
+            MainFrame.Navigate(renterRoomDetail);
+        }
+
+        // Phương thức điều hướng đến những trang cho người cho thuê
         public void NavigateToHostRegisterPage()
         {
             var HostRegisterPage = new HostRegisterPage(dbHelper, this);
             MainFrame.Navigate(HostRegisterPage);
         }
 
-        // Phương thức điều hướng đến trang chính sau khi đăng nhập thành công
+        public void NavigateToPostPage(Host host)
+        {
+            var postPage = new PostPage(dbHelper, this, host);
+            MainFrame.Navigate(postPage);
+        }
+
         public void NavigateToHostMainPage(Host host)
         {
-            var hostMainPage = new HostMainPage(host, this);
+            var hostMainPage = new HostMainPage(this, dbHelper, host);
             MainFrame.Navigate(hostMainPage);
         }
-        public void NavigateToRenterMainPage(Renter renter)
-        {
-            var renterMainPage = new RenterMainPage(renter, this);
-            MainFrame.Navigate(renterMainPage);
-        }
-        public void NavigateToBookingPage(int cityId)
-        {
-            var bookingPage = new BookingPage(dbHelper, this, cityId);
-            MainFrame.Navigate(bookingPage);
-        }
-
-        public void NavigateToRenterRoomDetail(int propertyId)
-        {
-            var renterRoomDetail = new RenterRoomDetail(propertyId);
-            MainFrame.Navigate(renterRoomDetail);
-        }
-
+        
         public void NavigateToHostRoomDetail(Property property)
         {
-            var hostRoomDetail = new HostRoomDetail(this, property, true); // true for edit mode
+            var hostRoomDetail = new HostRoomDetail(this, dbHelper, property, true); // true for edit mode
             MainFrame.Navigate(hostRoomDetail);
         }
     }
