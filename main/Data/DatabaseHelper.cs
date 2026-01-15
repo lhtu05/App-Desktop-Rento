@@ -9,7 +9,8 @@ namespace main.Data
 {
     public class DatabaseHelper
     {
-        public static string connectionString = "Server=DESKTOP-4OM7515\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        //public static string connectionString = "Server=DESKTOP-4OM7515\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        public static string connectionString = "Server=ADMIN;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         public string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -147,7 +148,7 @@ namespace main.Data
                             }
                             var hostId = Convert.ToInt32(hostIdObj);
 
-                            // Insert Account with FK to Renter
+                            // Insert Account with FK to Host
                             cmd = @"
                             INSERT INTO Account (UserName, PasswordHash, [Host(ID)], Role)
                             VALUES (@UserName, @PasswordHash, @HostID, 1);";

@@ -17,17 +17,17 @@ namespace main.Views
             _mainWindow = mainWindow;
         }
 
-        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        private void BtnHostRegister_Click(object sender, RoutedEventArgs e)
         {
-            //if (string.IsNullOrEmpty(txtFullName.Text) ||
-            //    string.IsNullOrEmpty(txtUsername.Text) ||
-            //    string.IsNullOrEmpty(txtEmail.Text) ||
-            //    string.IsNullOrEmpty(txtPassword.Password))
-            //{
-            //    MessageBox.Show("Vui lòng điền đầy đủ thông tin bắt buộc!", "Thông báo",
-            //        MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
+            if (string.IsNullOrEmpty(txtFullName.Text) ||
+                string.IsNullOrEmpty(txtUsername.Text) ||
+                string.IsNullOrEmpty(txtEmail.Text) ||
+                string.IsNullOrEmpty(txtPassword.Password))
+            {
+                MessageBox.Show("Vui lòng điền đầy đủ thông tin bắt buộc!", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             if (txtPassword.Password != txtConfirmPassword.Password)
             {
@@ -45,19 +45,19 @@ namespace main.Views
 
             try
             {
-                //if (_dbHelper.IsUsernameExists(txtUsername.Text))
-                //{
-                //    MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi",
-                //        MessageBoxButton.OK, MessageBoxImage.Error);
-                //    return;
-                //}
+                if (_dbHelper.IsUsernameExists(txtUsername.Text))
+                {
+                    MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
-                //if (_dbHelper.IsEmailExists(txtEmail.Text))
-                //{
-                //    MessageBox.Show("Email đã tồn tại!", "Lỗi",
-                //        MessageBoxButton.OK, MessageBoxImage.Error);
-                //    return;
-                //}
+                if (_dbHelper.IsEmailExists(txtEmail.Text))
+                {
+                    MessageBox.Show("Email đã tồn tại!", "Lỗi",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 Account newAccount = new Account
                 {
                     UserName = txtUsername.Text,
@@ -90,27 +90,12 @@ namespace main.Views
                 MessageBox.Show($"Lỗi đăng ký: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            using (var conn = _dbHelper.Connection)
-            {
-                string sql = @"INSERT INTO Renter (UserName, PasswordHash, Email, FullName, PhoneNumber, UserType) 
-                                   VALUES (@UserName, @PasswordHash, @Email, @FullName, @PhoneNumber, @UserType)";
-
-                //int newPropertyId = conn.QuerySingle<int>(sql, room);
-
-                //MessageBox.Show($"Đăng phòng thành công! ID mới: {newPropertyId}");
-            }
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        private void NavigateToMainPage(object sender, RoutedEventArgs e)
         {
             // Quay lại trang đăng nhập
-            _mainWindow.NavigateToLoginPage();
-        }
-
-        private void BtnBack_Click(object sender, RoutedEventArgs e)
-        {
-            // Quay lại trang đăng nhập
-            _mainWindow.NavigateToLoginPage();
+            _mainWindow.NavigateToMainPage();
         }
     }
 }
