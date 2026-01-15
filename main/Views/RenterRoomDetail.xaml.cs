@@ -61,7 +61,6 @@ namespace main.Views
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void CheckFavoriteStatus()
         {
             try
@@ -75,7 +74,6 @@ namespace main.Views
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void UpdateFavoriteButton()
         {
             btnFavorite.Content = _isFavorite ? "Đã yêu thích" : "Yêu thích";
@@ -83,7 +81,6 @@ namespace main.Views
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6B6B")) :
                 new SolidColorBrush(Colors.White);
         }
-
         private void FavoriteButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -112,7 +109,6 @@ namespace main.Views
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void BookButton_Click(object sender, RoutedEventArgs e)
         {
             if (dpViewDate.SelectedDate == null)
@@ -154,6 +150,11 @@ namespace main.Views
                 MessageBox.Show($"Lỗi đặt lịch xem phòng: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private void NavigateToRenterRoomList(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow?.NavigateToRenterRoomList(_renter, _property.Ward.City);
         }
     }
 

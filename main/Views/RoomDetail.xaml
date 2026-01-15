@@ -17,7 +17,7 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 Foreground="White" Margin="20,0,0,0"
-                                Click="BackButton_Click">
+                                Click="NavigateToRoomList">
                             <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
                         </Button>
                         <TextBlock x:Name="txtPropertyTitle" Text="Chi tiết phòng" 
@@ -31,11 +31,7 @@
                                 Background="White" Foreground="#2E86AB"
                                 Padding="15,8" Margin="0,0,10,0"
                                 FontSize="14" FontWeight="SemiBold"
-                                Click="FavoriteButton_Click"/>
-                        <Button x:Name="btnShare" Content="Chia sẻ" 
-                                Background="White" Foreground="#2E86AB"
-                                Padding="15,8" FontSize="14" FontWeight="SemiBold"
-                                Click="ShareButton_Click"/>
+                                Click="NavigateToLoginPage"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -215,13 +211,8 @@
                                     Background="#2E86AB" Foreground="White"
                                     FontSize="16" FontWeight="SemiBold" Padding="20,12"
                                     HorizontalAlignment="Stretch"
-                                    Click="BookButton_Click"/>
+                                    Click="NavigateToLoginPage"/>
 
-                            <Button Content="Gọi ngay cho chủ nhà" 
-                                    Background="#4CAF50" Foreground="White"
-                                    FontSize="14" FontWeight="SemiBold" Padding="15,8"
-                                    HorizontalAlignment="Stretch" Margin="0,10,0,0"
-                                    Click="CallButton_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

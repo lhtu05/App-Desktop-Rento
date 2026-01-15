@@ -26,14 +26,22 @@ namespace main.Views
 
         private void HNButton_Click(object sender, RoutedEventArgs e)
         {
+            City city = new City
+            {
+                ID = 1,
+            };
             e.Handled = true;
-            _mainWindow.NavigateToBookingPage(1); 
+            _mainWindow.NavigateToRoomList(city);
         }
 
         private void TPHCMButton_Click(object sender, RoutedEventArgs e)
         {
+            City city = new City
+            {
+                ID = 28,
+            };
             e.Handled = true;
-            _mainWindow.NavigateToBookingPage(2);
+            _mainWindow.NavigateToRoomList(city);
         }
 
 

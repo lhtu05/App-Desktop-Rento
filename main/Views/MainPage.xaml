@@ -8,7 +8,7 @@
             <Border Background="#2E86AB" Height="70" VerticalAlignment="Top">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1420"/>
+                        <ColumnDefinition Width="1120"/>
                         <ColumnDefinition Width="235"/>
                         <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="Auto"/>

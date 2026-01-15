@@ -35,7 +35,6 @@ namespace main.Views
             e.Handled = true;
             _mainWindow?.NavigateToLoginPage();
         }
-
         private void HNButton_Click(object sender, RoutedEventArgs e)
         {
             City city = new City
@@ -45,7 +44,6 @@ namespace main.Views
             e.Handled = true;
             _mainWindow.NavigateToRoomList(city); 
         }
-
         private void TPHCMButton_Click(object sender, RoutedEventArgs e)
         {
             City city = new City
@@ -55,7 +53,5 @@ namespace main.Views
             e.Handled = true;
             _mainWindow.NavigateToRoomList(city);
         }
-
-
     }
 }

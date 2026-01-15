@@ -17,7 +17,7 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 Foreground="White" Margin="20,0,0,0"
-                                Click="BackButton_Click">
+                                Click="NavigateToRenterMainPage">
                             <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
                         </Button>
                         <TextBlock x:Name="txtHeaderTitle" Text="Tìm phòng trọ" 
@@ -26,15 +26,10 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
-                        <Button x:Name="btnFilter" Content="Bộ lọc" 
-                                Background="White" Foreground="#2E86AB"
-                                Padding="15,8" Margin="0,0,10,0"
-                                FontSize="14" FontWeight="SemiBold"
-                                Click="FilterButton_Click"/>
-                        <Button Content="Bản đồ" 
+                        <!-- <Button Content="Bản đồ" 
                                 Background="White" Foreground="#2E86AB"
                                 Padding="15,8" FontSize="14" FontWeight="SemiBold"
-                                Click="MapButton_Click"/>
+                                Click="MapButton_Click"/> -->
                     </StackPanel>
                 </Grid>
             </Border>

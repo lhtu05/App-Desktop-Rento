@@ -58,11 +58,15 @@ namespace main.Views
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        private void BookButton_Click(object sender, RoutedEventArgs e)
+        private void NavigateToLoginPage(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
             _mainWindow?.NavigateToLoginPage();
+        }
+        private void NavigateToRoomList(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow?.NavigateToRoomList(_property.Ward.City);
         }
     }
 

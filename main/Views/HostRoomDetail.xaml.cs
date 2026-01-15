@@ -212,13 +212,27 @@ namespace main.Views
                 if (_images.Any(i => i.FileName == fileInfo.Name))
                     continue;
 
-                _images.Add(new ImageItem
+                _images.Add(new PropertyImage
                 {
                     FileName = fileInfo.Name,
                     FilePath = filePath
                 });
             }
         }
-
+        private void DeleteImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string fileName)
+            {
+                var item = _images.FirstOrDefault(i => i.FileName == fileName);
+                if (item != null)
+                    _images.Remove(item);
+            }
+        }
+        private void NavigateToRoomDetail(object sender, RoutedEventArgs e)
+        {
+            Property property = new Property();
+            e.Handled = true;
+            _mainWindow?.NavigateToRoomDetail(property);
+        }
     }
 }

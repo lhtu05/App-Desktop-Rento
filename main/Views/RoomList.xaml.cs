@@ -143,5 +143,10 @@ namespace main.Views
                 }
             }
         }
+        private void NavigateToMainPage(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _mainWindow?.NavigateToMainPage();
+        }
     }
 }
