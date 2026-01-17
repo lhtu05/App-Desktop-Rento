@@ -40,7 +40,7 @@ namespace main.Views
                 txtPropertyTitle.Text = _property.Title;
                 txtAddress.Text = _property.Address;
                 txtArea.Text = $"{_property.Area}m²";
-                txtRoomType.Text = _property.RoomType;
+                txtRoomType.Text = _property.PropertyType;
                 txtCapacity.Text = $"{_property.Capacity} người";
                 txtPostedDate.Text = _property.PostedDate.ToString("dd/MM/yyyy");
                 txtPrice.Text = $"{_property.Price:N0} đ/tháng";

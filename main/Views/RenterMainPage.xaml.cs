@@ -8,6 +8,7 @@ namespace main.Views
     public partial class RenterMainPage : UserControl
     {
         private MainWindow _mainWindow;
+        private Renter _renter;
 
         public ObservableCollection<Property> Rooms { get; set; }
 
@@ -15,6 +16,7 @@ namespace main.Views
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            _renter = renter;
             Rooms = new ObservableCollection<Property>();
         }
 
@@ -31,7 +33,7 @@ namespace main.Views
                 ID = 1,
             };
             e.Handled = true;
-            _mainWindow.NavigateToRoomList(city);
+            _mainWindow.NavigateToRenterRoomList(_renter, city);
         }
 
         private void TPHCMButton_Click(object sender, RoutedEventArgs e)
@@ -41,7 +43,7 @@ namespace main.Views
                 ID = 28,
             };
             e.Handled = true;
-            _mainWindow.NavigateToRoomList(city);
+            _mainWindow.NavigateToRenterRoomList(_renter, city);
         }
 
 

@@ -12,16 +12,8 @@ namespace main.Views
         private MainWindow _mainWindow;
         private Host _host;
         private DatabaseHelper _dbHelper;
-        private int _currentStep = 1;
 
-        public ObservableCollection<UploadedImage> UploadedImages { get; set; }
-
-        public class UploadedImage
-        {
-            public string FileName { get; set; }
-            public string FilePath { get; set; }
-            public long FileSize { get; set; } // in bytes
-        }
+        public ObservableCollection<PropertyImage> UploadedImages { get; set; }
 
         public PostPage(DatabaseHelper dbHelper, MainWindow mainWindow, Host host)
         {
@@ -29,7 +21,9 @@ namespace main.Views
             _mainWindow = mainWindow;
             _host = host;
             _dbHelper = dbHelper;
-            UploadedImages = new ObservableCollection<UploadedImage>();
+            UploadedImages = new ObservableCollection<PropertyImage>();
+            cmbCity.ItemsSource = dbHelper.LoadCities();
+            cmbPropertyType.ItemsSource = dbHelper.LoadPropertyType();
 
             InitializePage();
             SetupEventHandlers();
@@ -45,12 +39,12 @@ namespace main.Views
         {
             // Update preview when text changes
             txtTitle.TextChanged += (s, e) => UpdatePreview();
-            txtStreet.TextChanged += (s, e) => UpdatePreview();
+            txtAddress.TextChanged += (s, e) => UpdatePreview();
             txtPrice.TextChanged += (s, e) => UpdatePreview();
             txtArea.TextChanged += (s, e) => UpdatePreview();
             txtDescription.TextChanged += (s, e) => UpdatePreview();
 
-            cmbDistrict.SelectionChanged += (s, e) => UpdatePreview();
+            cmbWard.SelectionChanged += (s, e) => UpdatePreview();
             cmbCity.SelectionChanged += (s, e) => UpdatePreview();
         }
 
@@ -62,9 +56,9 @@ namespace main.Views
                 : txtTitle.Text;
 
             // Update address preview
-            string district = (cmbDistrict.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string district = (cmbWard.SelectedItem as ComboBoxItem)?.Content.ToString();
             string city = (cmbCity.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string street = txtStreet.Text;
+            string street = txtAddress.Text;
 
             if (!string.IsNullOrWhiteSpace(street) && !string.IsNullOrWhiteSpace(district))
             {
@@ -155,11 +149,11 @@ namespace main.Views
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtStreet.Text))
+            if (string.IsNullOrWhiteSpace(txtAddress.Text))
             {
                 MessageBox.Show("Vui lòng nhập địa chỉ", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
-                txtStreet.Focus();
+                txtAddress.Focus();
                 return false;
             }
 
@@ -198,35 +192,50 @@ namespace main.Views
             return true;
         }
 
+        private void cmbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbCity.SelectedValue == null) return;
+
+            int cityID = (int)cmbCity.SelectedValue;
+            cmbWard.ItemsSource = _dbHelper.LoadWardsByCityID(cityID);
+        }
+
         private Property CreatePropertyFromForm()
         {
             var property = new Property
             {
                 Title = txtTitle.Text,
-                Address = $"{txtStreet.Text}, {(cmbDistrict.SelectedItem as ComboBoxItem)?.Content}, {(cmbCity.SelectedItem as ComboBoxItem)?.Content}",
+                Address = txtAddress.Text,
+                Ward = new Ward
+                {
+                    ID = (int)cmbWard.SelectedValue,
+                },
                 Price = ulong.Parse(txtPrice.Text),
                 Area = double.Parse(txtArea.Text),
                 Deposit = ulong.Parse(txtDeposit.Text),
-                RoomType = (cmbRoomType.SelectedItem as ComboBoxItem)?.Content.ToString(),
-                Capacity = cmbCapacity.SelectedIndex + 1, // Assuming 1-based capacity
+                Status = int.Parse(txtStatus.Text),
+                PropertyType = new PropertyType
+                {
+                    ID = (int)cmbPropertyType.SelectedValue,
+                },
+                PropertyAmenity = new PropertyAmenity
+                {
+                    // Collect amenities
+                    Wifi = chkWifi.IsChecked,
+                    Parking = chkParking.IsChecked,
+                    AirCon = chkAirCon.IsChecked,
+                    WaterHeater = chkWaterHeater.IsChecked,
+                    Fridge = chkFridge.IsChecked,
+                    Washing = true,
+                    Kitchen = true,
+                    Security = true,
+                    Camera = true,
+                    Elevator = true, 
+                },
                 Description = txtDescription.Text,
-                Status = "Available",
                 PostedDate = System.DateTime.Now,
                 UpdatedDate = System.DateTime.Now
             };
-
-            // Collect amenities
-            property.Amenities = new System.Collections.Generic.List<string>();
-            if (chkWifi.IsChecked == true) property.Amenities.Add("WiFi");
-            if (chkParking.IsChecked == true) property.Amenities.Add("Chỗ để xe");
-            if (chkAirCon.IsChecked == true) property.Amenities.Add("Máy lạnh");
-            if (chkWaterHeater.IsChecked == true) property.Amenities.Add("Nóng lạnh");
-            if (chkFridge.IsChecked == true) property.Amenities.Add("Tủ lạnh");
-            if (chkWashing.IsChecked == true) property.Amenities.Add("Máy giặt");
-            if (chkKitchen.IsChecked == true) property.Amenities.Add("Bếp");
-            if (chkSecurity.IsChecked == true) property.Amenities.Add("Bảo vệ 24/7");
-            if (chkCamera.IsChecked == true) property.Amenities.Add("Camera an ninh");
-            if (chkElevator.IsChecked == true) property.Amenities.Add("Thang máy");
 
             // Collect image URLs
             property.ImageUrls = new System.Collections.Generic.List<string>();
@@ -236,16 +245,6 @@ namespace main.Views
             }
 
             return property;
-        }
-
-        private void NextStepButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentStep < 3)
-            {
-                _currentStep++;
-                // TODO: Update step indicator and show next step content
-                MessageBox.Show($"Bước {_currentStep}/3", "Thông báo");
-            }
         }
 
         private void UploadImages_Click(object sender, RoutedEventArgs e)
@@ -277,7 +276,7 @@ namespace main.Views
                         break;
                     }
 
-                    UploadedImages.Add(new UploadedImage
+                    UploadedImages.Add(new PropertyImage
                     {
                         FileName = fileInfo.Name,
                         FilePath = filePath,
@@ -303,6 +302,11 @@ namespace main.Views
                     }
                 }
             }
+        }
+
+        private void txtPrice_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

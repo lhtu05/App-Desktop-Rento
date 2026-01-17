@@ -9,8 +9,8 @@ namespace main.Data
 {
     public class DatabaseHelper
     {
-        //public static string connectionString = "Server=DESKTOP-4OM7515\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
-        public static string connectionString = "Server=ADMIN;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        public static string connectionString = "Server=DESKTOP-4OM7515\\SQLEXPRESS;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        //public static string connectionString = "Server=ADMIN;Database=Rento_DB;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
         public string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -31,25 +31,35 @@ namespace main.Data
                     SELECT 
                         a.UserName,
                         a.PasswordHash,
-                        a.[Renter(ID)],
-                        a.Role, 
+                        a.Role,
 
-                        r.ID AS RenterID_PK,
-                        r.FullName,
-                        r.Email,
-                        r.PhoneNumber,
-                        r.CreatedAt
+                        -- Renter
+                        r.ID        AS RenterID,
+                        r.FullName  AS RenterFullName,
+                        r.Email     AS RenterEmail,
+                        r.PhoneNumber AS RenterPhone,
+                        r.CreatedAt AS RenterCreatedAt,
+
+                        -- Host
+                        h.ID        AS HostID,
+                        h.FullName  AS HostFullName,
+                        h.Email     AS HostEmail,
+                        h.PhoneNumber AS HostPhone,
+                        h.CreatedAt AS HostCreatedAt
+
                     FROM Account a
-                    JOIN Renter r ON a.[Renter(ID)] = r.ID
+                    LEFT JOIN Renter r ON a.RenterID = r.ID
+                    LEFT JOIN Host   h ON a.HostID   = h.ID
                     WHERE a.UserName = @UserName
-                      AND a.PasswordHash = @PasswordHash";
+                        AND a.PasswordHash = @PasswordHash;
+                    "; 
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.Add("@UserName", SqlDbType.VarChar).Value = userName;
                 cmd.Parameters.Add("@PasswordHash", SqlDbType.VarChar).Value = hashedPassword;
 
                 conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
+                using SqlDataReader reader = cmd.ExecuteReader();
 
                 if (reader.Read())
                 {
@@ -57,27 +67,46 @@ namespace main.Data
                     {
                         UserName = reader["UserName"].ToString(),
                         PasswordHash = reader["PasswordHash"].ToString(),
-                        Renter = new Renter
-                        {
-                            ID = (int)reader["RenterID_PK"],
-                            FullName = reader["FullName"].ToString(),
-                            Email = reader["Email"].ToString(),
-                            PhoneNumber = reader["PhoneNumber"].ToString(),
-                            CreatedAt = (DateTime)reader["CreatedAt"]
-                        },
-                        Role = (bool)reader["Role"],
+                        Role = (bool)reader["Role"]
                     };
+
+                    // Role = 0 → Renter
+                    if (!account.Role && reader["RenterID"] != DBNull.Value)
+                    {
+                        account.Renter = new Renter
+                        {
+                            ID = (int)reader["RenterID"],
+                            FullName = reader["RenterFullName"].ToString(),
+                            Email = reader["RenterEmail"].ToString(),
+                            PhoneNumber = reader["RenterPhone"].ToString(),
+                            CreatedAt = (DateTime)reader["RenterCreatedAt"]
+                        };
+                    }
+
+                    // Role = 1 → Host
+                    if (account.Role && reader["HostID"] != DBNull.Value)
+                    {
+                        account.Host = new Host
+                        {
+                            ID = (int)reader["HostID"],
+                            FullName = reader["HostFullName"].ToString(),
+                            Email = reader["HostEmail"].ToString(),
+                            PhoneNumber = reader["HostPhone"].ToString(),
+                            CreatedAt = (DateTime)reader["HostCreatedAt"]
+                        };
+                    }
                 }
             }
 
             return account;
         }
 
+
         // Plan (pseudocode)
         // - Use a single connection and transaction to ensure atomicity.
         // - Insert into Renter in one statement, setting CreatedAt to current time using GETDATE().
         // - Capture the newly created Renter ID using OUTPUT INSERTED.ID.
-        // - Insert into Account in the same transaction, linking the captured Renter ID via the foreign key column [Renter(ID)].
+        // - Insert into Account in the same transaction, linking the captured Renter ID via the foreign key column RenterID.
         // - Hash the password before inserting into Account.
         // - Commit the transaction if both inserts succeed, otherwise rollback.
         // - Return true if both operations succeed, false otherwise.
@@ -116,7 +145,7 @@ namespace main.Data
 
                             // Insert Account with FK to Renter
                             cmd = @"
-                            INSERT INTO Account (UserName, PasswordHash, [Renter(ID)], Role)
+                            INSERT INTO Account (UserName, PasswordHash, RenterID, Role)
                             VALUES (@UserName, @PasswordHash, @RenterID, 0);";
 
                             using var insertAccountCmd = new SqlCommand(cmd, conn, tran);
@@ -150,7 +179,7 @@ namespace main.Data
 
                             // Insert Account with FK to Host
                             cmd = @"
-                            INSERT INTO Account (UserName, PasswordHash, [Host(ID)], Role)
+                            INSERT INTO Account (UserName, PasswordHash, HostID, Role)
                             VALUES (@UserName, @PasswordHash, @HostID, 1);";
 
                             using var insertAccountCmd = new SqlCommand(cmd, conn, tran);
@@ -183,7 +212,7 @@ namespace main.Data
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "SELECT COUNT(1) FROM Renter WHERE UserName = @UserName";
+                string query = "SELECT COUNT(1) FROM Account WHERE UserName = @UserName";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@UserName", UserName);
 
@@ -195,6 +224,7 @@ namespace main.Data
 
         public bool IsEmailExists(string email)
         {
+            int count = 0;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 string query = "SELECT COUNT(1) FROM Renter WHERE Email = @Email";
@@ -202,7 +232,7 @@ namespace main.Data
                 cmd.Parameters.AddWithValue("@Email", email);
 
                 conn.Open();
-                int count = (int)cmd.ExecuteScalar();
+                count += (int)cmd.ExecuteScalar();
                 return count > 0;
             }
         }
@@ -238,7 +268,7 @@ namespace main.Data
         }
 
         // Property methods
-        public List<Property> GetPropertiesByFilter(string city = null, decimal? minPrice = null, decimal? maxPrice = null, string roomType = null, List<string> amenities = null)
+        public List<Property> GetPropertiesByFilter(string city = null, decimal? minPrice = null, decimal? maxPrice = null, string PropertyType = null, List<string> amenities = null)
         {
             var properties = new List<Property>();
 
@@ -269,10 +299,10 @@ namespace main.Data
                     parameters.Add(new SqlParameter("@MaxPrice", maxPrice.Value));
                 }
 
-                if (!string.IsNullOrEmpty(roomType))
+                if (!string.IsNullOrEmpty(PropertyType))
                 {
-                    query += " AND p.RoomType = @RoomType";
-                    parameters.Add(new SqlParameter("@RoomType", roomType));
+                    query += " AND p.PropertyType = @PropertyType";
+                    parameters.Add(new SqlParameter("@PropertyType", PropertyType));
                 }
 
                 query += " ORDER BY p.PostedDate DESC";
@@ -306,7 +336,7 @@ namespace main.Data
                         Price = (ulong)reader["Price"],
                         Deposit = (ulong)reader["Deposit"],
                         Area = (double)reader["Area"],
-                        RoomType = reader["RoomType"].ToString(),
+                        PropertyType = reader["PropertyType"].ToString(),
                         Capacity = (int)reader["Capacity"],
                         Description = reader["Description"].ToString(),
                         Status = reader["Status"].ToString(),
@@ -362,7 +392,7 @@ namespace main.Data
                         Price = (ulong)reader["Price"],
                         Deposit = (ulong)reader["Deposit"],
                         Area = (double)reader["Area"],
-                        RoomType = reader["RoomType"].ToString(),
+                        PropertyType = reader["PropertyType"].ToString(),
                         Capacity = (int)reader["Capacity"],
                         Description = reader["Description"].ToString(),
                         Status = reader["Status"].ToString(),
@@ -491,7 +521,7 @@ namespace main.Data
                         Price = (ulong)reader["Price"],
                         Deposit = (ulong)reader["Deposit"],
                         Area = (double)reader["Area"],
-                        RoomType = reader["RoomType"].ToString(),
+                        PropertyType = reader["PropertyType"].ToString(),
                         Status = reader["Status"].ToString(),
                         PostedDate = (DateTime)reader["PostedDate"],
                         ViewCount = (int)reader["ViewCount"]
@@ -502,6 +532,83 @@ namespace main.Data
             return properties;
         }
 
+        public List<City> LoadCities()
+        {
+            var list = new List<City>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT ID, Name FROM City";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new City
+                    {
+                        ID = reader.GetInt32(0),
+                        Name = reader.GetString(1)
+                    });
+                }
+            }
+            return list;
+        }
+
+        public List<Ward> LoadWardsByCityID(int cityID)
+        {
+            var list = new List<Ward>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"
+                                SELECT ID, CityID, Name 
+                                FROM Ward 
+                                WHERE CityID = @CityID"; 
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@CityID", cityID);
+
+                conn.Open();
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new Ward
+                    {
+                        ID = reader.GetInt32(0),
+                        Name = reader.GetString(2)
+                    });
+                }
+            }
+            return list;
+        }
+
+        public List<PropertyType> LoadPropertyType()
+        {
+            var list = new List<PropertyType>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT ID, Name FROM PropertyType";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new PropertyType
+                    {
+                        ID = reader.GetInt32(0),
+                        Name = reader.GetString(1)
+                    });
+                }
+            }
+            return list;
+        }
+
         public int AddProperty(Property property)
         {
             int newId = 0;
@@ -510,10 +617,10 @@ namespace main.Data
             {
                 string query = @"INSERT INTO Properties 
                                (HostId, Title, Address, City, Price, Deposit, 
-                                Area, RoomType, Capacity, Description, Status, PostedDate)
+                                Area, PropertyType, Capacity, Description, Status, PostedDate)
                                OUTPUT INSERTED.PropertyID
                                VALUES (@HostId, @Title, @Address, @City, @Price, 
-                                       @Deposit, @Area, @RoomType, @Capacity, @Description, 
+                                       @Deposit, @Area, @PropertyType, @Capacity, @Description, 
                                        'Available', @PostedDate)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -524,7 +631,7 @@ namespace main.Data
                 cmd.Parameters.AddWithValue("@Price", property.Price);
                 cmd.Parameters.AddWithValue("@Deposit", property.Deposit);
                 cmd.Parameters.AddWithValue("@Area", property.Area);
-                cmd.Parameters.AddWithValue("@RoomType", property.RoomType);
+                cmd.Parameters.AddWithValue("@PropertyType", property.PropertyType);
                 cmd.Parameters.AddWithValue("@Capacity", property.Capacity);
                 cmd.Parameters.AddWithValue("@Description", property.Description ?? "");
                 cmd.Parameters.AddWithValue("@PostedDate", DateTime.Now);
@@ -553,7 +660,7 @@ namespace main.Data
                                Price = @Price,
                                Deposit = @Deposit,
                                Area = @Area,
-                               RoomType = @RoomType,
+                               PropertyType = @PropertyType,
                                Capacity = @Capacity,
                                Description = @Description,
                                Status = @Status,
@@ -568,7 +675,7 @@ namespace main.Data
                 cmd.Parameters.AddWithValue("@Price", property.Price);
                 cmd.Parameters.AddWithValue("@Deposit", property.Deposit);
                 cmd.Parameters.AddWithValue("@Area", property.Area);
-                cmd.Parameters.AddWithValue("@RoomType", property.RoomType);
+                cmd.Parameters.AddWithValue("@PropertyType", property.PropertyType);
                 cmd.Parameters.AddWithValue("@Capacity", property.Capacity);
                 cmd.Parameters.AddWithValue("@Description", property.Description ?? "");
                 cmd.Parameters.AddWithValue("@Status", property.Status);
@@ -755,5 +862,6 @@ namespace main.Data
                 return count > 0;
             }
         }
+
     }
 }

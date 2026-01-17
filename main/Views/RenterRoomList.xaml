@@ -97,11 +97,12 @@
                             </StackPanel>
 
                             <!-- Apply Button -->
-                            <Button Content="Áp dụng" 
-                                    Background="#2E86AB" Foreground="White"
-                                    Padding="15" FontSize="14" FontWeight="SemiBold"
+                            <Button Background="#2E86AB"  
                                     HorizontalAlignment="Stretch"
-                                    Click="ApplyFilterButton_Click"/>
+                                    Click="ApplyFilterButton_Click">
+                                <TextBlock Text="Lọc kết quả" FontWeight="SemiBold"
+                                           Foreground="White" FontSize="15"/>
+                            </Button>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
@@ -152,7 +153,7 @@
                                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                                         <TextBlock Text="{Binding Area, StringFormat='{}{0}m²'}" 
                                                                   Foreground="#666" Margin="0,0,20,0"/>
-                                                        <TextBlock Text="{Binding RoomType}" 
+                                                        <TextBlock Text="{Binding PropertyType}" 
                                                                   Foreground="#666" Margin="0,0,20,0"/>
                                                         <TextBlock Text="{Binding Capacity, StringFormat='Tối đa {0} người'}" 
                                                                   Foreground="#666"/>

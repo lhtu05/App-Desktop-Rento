@@ -28,36 +28,33 @@ namespace main.Views
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
             if (txtPassword.Password != txtConfirmPassword.Password)
             {
                 MessageBox.Show("Mật khẩu xác nhận không khớp!", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
             //if (txtPassword.Password.Length < 6)
             //{
             //    MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự!", "Lỗi",
             //        MessageBoxButton.OK, MessageBoxImage.Error);
             //    return;
             //}
-
             try
             {
-                if (_dbHelper.IsUsernameExists(txtUsername.Text))
-                {
-                    MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                //if (_dbHelper.IsUsernameExists(txtUsername.Text))
+                //{
+                //    MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi",
+                //        MessageBoxButton.OK, MessageBoxImage.Error);
+                //    return;
+                //}
 
-                if (_dbHelper.IsEmailExists(txtEmail.Text))
-                {
-                    MessageBox.Show("Email đã tồn tại!", "Lỗi",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                //if (_dbHelper.IsEmailExists(txtEmail.Text))
+                //{
+                //    MessageBox.Show("Email đã tồn tại!", "Lỗi",
+                //        MessageBoxButton.OK, MessageBoxImage.Error);
+                //    return;
+                //}
 
                 Account newAccount = new Account
                 {

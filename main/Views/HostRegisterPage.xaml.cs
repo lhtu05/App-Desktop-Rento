@@ -45,19 +45,19 @@ namespace main.Views
 
             try
             {
-                if (_dbHelper.IsUsernameExists(txtUsername.Text))
-                {
-                    MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                //if (_dbHelper.IsUsernameExists(txtUsername.Text))
+                //{
+                //    MessageBox.Show("Tên đăng nhập đã tồn tại!", "Lỗi",
+                //        MessageBoxButton.OK, MessageBoxImage.Error);
+                //    return;
+                //}
 
-                if (_dbHelper.IsEmailExists(txtEmail.Text))
-                {
-                    MessageBox.Show("Email đã tồn tại!", "Lỗi",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                //if (_dbHelper.IsEmailExists(txtEmail.Text))
+                //{
+                //    MessageBox.Show("Email đã tồn tại!", "Lỗi",
+                //        MessageBoxButton.OK, MessageBoxImage.Error);
+                //    return;
+                //}
                 Account newAccount = new Account
                 {
                     UserName = txtUsername.Text,

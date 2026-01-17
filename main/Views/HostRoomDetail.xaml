@@ -93,7 +93,7 @@
                                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Loại phòng*:" 
                                           FontWeight="SemiBold" Margin="0,0,0,10"/>
                                 <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cmbEditRoomType" 
-                                          SelectedValue="{Binding RoomType}" Margin="0,0,0,10">
+                                          SelectedValue="{Binding PropertyType}" Margin="0,0,0,10">
                                     <ComboBoxItem Content="Phòng trọ"/>
                                     <ComboBoxItem Content="Chung cư mini"/>
                                     <ComboBoxItem Content="Nhà nguyên căn"/>

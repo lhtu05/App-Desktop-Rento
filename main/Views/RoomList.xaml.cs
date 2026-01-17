@@ -57,7 +57,7 @@ namespace main.Views
                 // Lấy giá trị filter
                 decimal? minPrice = null;
                 decimal? maxPrice = null;
-                string roomType = null;
+                string PropertyType = null;
 
                 // Xử lý filter theo giá
                 var priceRange = (cmbPriceRange.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -87,12 +87,12 @@ namespace main.Views
                 if (chkRoomType1.IsChecked == true && chkRoomType2.IsChecked == false &&
                     chkRoomType3.IsChecked == false && chkRoomType4.IsChecked == false)
                 {
-                    roomType = "Phòng trọ";
+                    PropertyType = "Phòng trọ";
                 }
                 else if (chkRoomType2.IsChecked == true && chkRoomType1.IsChecked == false &&
                          chkRoomType3.IsChecked == false && chkRoomType4.IsChecked == false)
                 {
-                    roomType = "Chung cư mini";
+                    PropertyType = "Chung cư mini";
                 }
                 // ... xử lý các trường hợp khác
 
@@ -100,7 +100,7 @@ namespace main.Views
                 var properties = _dbHelper.GetPropertiesByFilter(
                     minPrice: minPrice,
                     maxPrice: maxPrice,
-                    roomType: roomType
+                    PropertyType: PropertyType
                 );
 
                 foreach (var property in properties)

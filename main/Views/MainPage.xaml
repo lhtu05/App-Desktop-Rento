@@ -53,16 +53,18 @@
             <Border Margin="0,70,0,0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="340"/>
                         <!-- Hero -->
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="340"/>
                         <!-- Content -->
+                        <RowDefinition Height="340"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- HERO SECTION -->
                     <Grid Grid.Row="0">
                         <!-- Ảnh nền -->
-                        <Image Source="/Assets/hero.png"
+                        <Image Source="/Assets/Title.png"
                             Stretch="UniformToFill"/>
                         <!-- Overlay mờ -->
                         <Border Background="#80000000"/>
@@ -95,7 +97,7 @@
                                     <TextBox Height="40"
                                          VerticalContentAlignment="Center"
                                          FontSize="14"
-                                         Text="Tìm theo khu vực, trường, tòa nhà"/>
+                                         materialDesign:HintAssist.Hint="Tìm theo khu vực, trường, tòa nhà"/>
 
                                     <Button Grid.Column="1"
                                          Content="🔍"
@@ -108,11 +110,13 @@
 
 
                     <!-- Bài đăng Section -->
-                    <StackPanel Grid.Row="1" Margin="40">
+                    <StackPanel Grid.Row="1" Margin="0" Background="LightGray">
                         <DockPanel Margin="0,0,0,16">
-                            <TextBlock Text="Tòa nhà có phòng bán chạy"
+                            <TextBlock Text="Phòng trọ được đánh giá tốt"
                                FontSize="22"
                                FontWeight="SemiBold"
+                               Padding="10,5,10,10"
+                               Margin="20,10,10,10"
                                DockPanel.Dock="Left"/>
 
                             <TextBlock Text="Xem tất cả >"
@@ -250,6 +254,70 @@
                                     </Grid>
                                 </Border>
                             </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="3" Padding="20"
+                            Background="LightGray">
+                        <StackPanel  Orientation="Horizontal" Margin="20" 
+                                    HorizontalAlignment="Center">
+
+                            <!-- CARD 1 -->
+                            <Button Click="TPHCMButton_Click"
+                            Tag="HCM" Padding="0" Height="Auto" Width="Auto"
+                            BorderThickness="0" Background="Transparent">
+
+                                <Border Width="520"
+                                Height="500"
+                                CornerRadius="16"
+                                ClipToBounds="True">
+
+                                    <Grid>
+                                        <!-- Image -->
+                                        <Image Source="/Assets/HCM.jpg"
+                                        Stretch="UniformToFill"/>
+                                        <!-- Overlay -->
+                                        <Border Background="#70000000"/>
+                                        <!-- Text -->
+                                        <StackPanel VerticalAlignment="Top" Margin="20">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="TP. Hồ Chí Minh"
+                                                FontSize="22"
+                                                FontWeight="Bold"
+                                                Foreground="White"/>
+                                                <TextBlock Text=" 🇻🇳" FontSize="22"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Button>
+
+                            <!-- CARD 2 -->
+                            <Button Click="HNButton_Click" Height="Auto" Width="Auto"
+                            Tag="HN" Padding="0" BorderThickness="0"
+                            Background="Transparent">
+
+                                <Border Width="520"
+                                Height="260"
+                                CornerRadius="16"
+                                ClipToBounds="True">
+
+                                    <Grid>
+                                        <Image Source="/Assets/HN.jpg"
+                                           Stretch="UniformToFill"/>
+                                        <Border Background="#70000000"/>
+                                        <StackPanel VerticalAlignment="Top" Margin="20">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Hà Nội"
+                                                FontSize="22"
+                                                FontWeight="Bold"
+                                                Foreground="White"/>
+                                                <TextBlock Text=" 🇻🇳" FontSize="22"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Button>
                         </StackPanel>
                     </Border>
                 </Grid>

@@ -6,9 +6,14 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Background="#F5F5F5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
             <!-- Header -->
-            <Border Background="#2E86AB" Height="70" CornerRadius="10" Margin="0,0,0,20">
-                <Grid>
+            <Border Background="#2E86AB" Height="70" Margin="0,0,0,20" VerticalAlignment="Top">
+                <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -26,21 +31,13 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
-                        <Button Content="Xem trước" 
-                                Background="#2196F3" Foreground="White"
-                                Padding="15,8" Margin="0,0,10,0"
-                                FontSize="14" FontWeight="SemiBold"
-                                Click="PreviewButton_Click"/>
-                        <Button Content="Đăng ngay" 
-                                Background="#4CAF50" Foreground="White"
-                                Padding="15,8" FontSize="14" FontWeight="SemiBold"
-                                Click="PostButton_Click"/>
+                        
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Form Content -->
-            <Grid>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
@@ -49,32 +46,6 @@
 
                 <!-- Left Column - Form Fields -->
                 <StackPanel Grid.Column="0">
-                    <!-- Step Indicator -->
-                    <Border Background="White" CornerRadius="10" Padding="20" Margin="0,0,0,20">
-                        <StackPanel>
-                            <TextBlock Text="Bước 1/3: Thông tin cơ bản" FontSize="16" FontWeight="Bold" 
-                                      Foreground="#2E86AB" Margin="0,0,0,10"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Border Width="30" Height="30" CornerRadius="15" Background="#2E86AB">
-                                    <TextBlock Text="1" Foreground="White" 
-                                              HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              FontWeight="Bold"/>
-                                </Border>
-                                <Border Width="100" Height="3" Background="#2E86AB" Margin="10,0" VerticalAlignment="Center"/>
-                                <Border Width="30" Height="30" CornerRadius="15" Background="#E0E0E0">
-                                    <TextBlock Text="2" Foreground="#666" 
-                                              HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              FontWeight="Bold"/>
-                                </Border>
-                                <Border Width="100" Height="3" Background="#E0E0E0" Margin="10,0" VerticalAlignment="Center"/>
-                                <Border Width="30" Height="30" CornerRadius="15" Background="#E0E0E0">
-                                    <TextBlock Text="3" Foreground="#666" 
-                                              HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              FontWeight="Bold"/>
-                                </Border>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
 
                     <!-- Basic Information -->
                     <Border Background="White" CornerRadius="10" Padding="30" Margin="0,0,0,20">
@@ -109,28 +80,33 @@
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Địa chỉ*:" 
                                           FontWeight="SemiBold" Margin="0,0,0,15"/>
                                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,15">
-                                    <TextBox x:Name="txtStreet" 
+                                    <TextBox x:Name="txtAddress" 
                                              FontSize="14" Padding="10" 
                                              BorderBrush="#E0E0E0" BorderThickness="1"
                                              materialDesign:HintAssist.Hint="Số nhà, tên đường"
                                              Margin="0,0,0,10"/>
-                                    <ComboBox x:Name="cmbDistrict" SelectedIndex="0" Margin="0,0,0,10">
-                                        <ComboBoxItem Content="Quận 1"/>
-                                        <ComboBoxItem Content="Quận 2"/>
-                                        <ComboBoxItem Content="Quận 3"/>
-                                        <ComboBoxItem Content="Quận 4"/>
-                                        <ComboBoxItem Content="Quận 5"/>
-                                    </ComboBox>
-                                    <ComboBox x:Name="cmbCity" SelectedIndex="0">
-                                        <ComboBoxItem Content="TP. Hồ Chí Minh"/>
-                                        <ComboBoxItem Content="Hà Nội"/>
-                                        <ComboBoxItem Content="Đà Nẵng"/>
-                                    </ComboBox>
+                                    <ComboBox x:Name="cmbCity" Width="250" HorizontalAlignment="Left"
+                                             FontSize="14" Padding="10" 
+                                             materialDesign:HintAssist.Hint="Tỉnh/Thành phố"
+                                             DisplayMemberPath="Name"
+                                             SelectedValuePath="ID"
+                                             SelectionChanged="cmbCity_SelectionChanged"/>
+
+                                    <ComboBox x:Name="cmbWard" Width="250" HorizontalAlignment="Left"
+                                             FontSize="14" Padding="10" 
+                                             materialDesign:HintAssist.Hint="Phường/Xã"
+                                             DisplayMemberPath="Name"
+                                             SelectedValuePath="ID"
+                                             Margin="0,10,0,0"/>
                                 </StackPanel>
 
                                 <!-- Price & Area -->
                                 <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,15">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="20"/>
                                         <ColumnDefinition Width="*"/>
@@ -141,12 +117,12 @@
                                         <TextBlock Text="Giá thuê/tháng*" FontWeight="SemiBold" Margin="0,0,0,10"/>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="250"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBox Grid.Column="0" x:Name="txtPrice" 
-                                                     FontSize="14" Padding="10" 
-                                                     BorderBrush="#E0E0E0" BorderThickness="1"/>
+                                                     FontSize="14" Padding="10"
+                                                     BorderBrush="#E0E0E0" BorderThickness="1" TextChanged="txtPrice_TextChanged"/>
                                             <TextBlock Grid.Column="1" Text="đ" Margin="10,0,0,0" 
                                                       VerticalAlignment="Center"/>
                                         </Grid>
@@ -157,7 +133,7 @@
                                         <TextBlock Text="Diện tích (m²)*" FontWeight="SemiBold" Margin="0,0,0,10"/>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="250"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBox Grid.Column="0" x:Name="txtArea" 
@@ -167,45 +143,57 @@
                                                       VerticalAlignment="Center"/>
                                         </Grid>
                                     </StackPanel>
-                                </Grid>
 
-                                <!-- Deposit -->
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Tiền cọc*:" 
-                                          FontWeight="SemiBold" Margin="0,0,0,15"/>
-                                <Grid Grid.Row="3" Grid.Column="1" Margin="0,0,0,15">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Grid.Column="0" x:Name="txtDeposit" 
-                                             FontSize="14" Padding="10" 
-                                             BorderBrush="#E0E0E0" BorderThickness="1"/>
-                                    <TextBlock Grid.Column="1" Text="đ" Margin="10,0,0,0" 
-                                              VerticalAlignment="Center"/>
+                                    <!-- Deposit -->
+                                    <StackPanel Grid.Column="4">
+                                        <TextBlock Grid.Column="0" Text="Tiền cọc*:" 
+                                                   FontWeight="SemiBold" Margin="0,0,0,15"/>
+                                        <Grid Grid.Column="1" Margin="0,0,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="250"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Grid.Column="0" x:Name="txtDeposit" 
+                                                     FontSize="14" Padding="10" 
+                                                     BorderBrush="#E0E0E0" BorderThickness="1"/>
+                                            <TextBlock Grid.Column="1" Text="đ" Margin="10,0,0,0" 
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Status -->
+                                    <StackPanel Grid.Column="6">
+                                        <TextBlock Grid.Column="0" Text="Số phòng*:" 
+                                                   FontWeight="SemiBold" Margin="0,0,0,15"/>
+                                        <Grid Grid.Column="1" Margin="0,0,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Grid.Column="0" x:Name="txtStatus" 
+                                                     FontSize="14" Padding="10" 
+                                                     BorderBrush="#E0E0E0" BorderThickness="1"/>
+                                            <TextBlock Grid.Column="1" Text="phòng" Margin="10,0,0,0" 
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </StackPanel>
                                 </Grid>
 
                                 <!-- Room Type -->
-                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Loại phòng*:" 
-                                          FontWeight="SemiBold" Margin="0,0,0,15"/>
-                                <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cmbRoomType" 
-                                          SelectedIndex="0" Margin="0,0,0,15">
-                                    <ComboBoxItem Content="Phòng trọ"/>
-                                    <ComboBoxItem Content="Chung cư mini"/>
-                                    <ComboBoxItem Content="Nhà nguyên căn"/>
-                                    <ComboBoxItem Content="Căn hộ dịch vụ"/>
-                                </ComboBox>
-
-                                <!-- Capacity -->
-                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Sức chứa*:" 
-                                          FontWeight="SemiBold" Margin="0,0,0,15"/>
-                                <ComboBox Grid.Row="5" Grid.Column="1" x:Name="cmbCapacity" 
-                                          SelectedIndex="0" Margin="0,0,0,15">
-                                    <ComboBoxItem Content="1 người"/>
-                                    <ComboBoxItem Content="2 người"/>
-                                    <ComboBoxItem Content="3 người"/>
-                                    <ComboBoxItem Content="4 người"/>
-                                    <ComboBoxItem Content="Trên 4 người"/>
-                                </ComboBox>
+                                <Grid Grid.Row="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="75"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Loại phòng*:" 
+                                          FontWeight="SemiBold" Margin="0,0,0,15" Height="35" VerticalAlignment="Bottom"/>
+                                    <ComboBox Grid.Column="1"
+                                          x:Name="cmbPropertyType" Width="250" HorizontalAlignment="Left"
+                                          FontSize="14" 
+                                          DisplayMemberPath="Name"
+                                          SelectedValuePath="ID"
+                                          Margin="0,10,0,0"/>
+                                </Grid>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -221,7 +209,7 @@
                             <WrapPanel>
                                 <CheckBox x:Name="chkWifi" Content="WiFi" Margin="0,0,20,15"/>
                                 <CheckBox x:Name="chkParking" Content="Chỗ để xe" Margin="0,0,20,15"/>
-                                <CheckBox x:Name="chkAirCon" Content="Máy lạnh" Margin="0,0,20,15"/>
+                                <CheckBox x:Name="chkAirCon" Content="Điều hòa" Margin="0,0,20,15"/>
                                 <CheckBox x:Name="chkWaterHeater" Content="Nóng lạnh" Margin="0,0,20,15"/>
                                 <CheckBox x:Name="chkFridge" Content="Tủ lạnh" Margin="0,0,20,15"/>
                                 <CheckBox x:Name="chkWashing" Content="Máy giặt" Margin="0,0,20,15"/>
@@ -259,9 +247,15 @@
                         <Button Content="Quay lại" Width="120" Height="40"
                                 Background="#9E9E9E" Foreground="White" FontSize="14"
                                 Margin="0,0,20,0" Click="BackButton_Click"/>
-                        <Button Content="Tiếp theo" Width="120" Height="40"
-                                Background="#2E86AB" Foreground="White" FontSize="14" FontWeight="SemiBold"
-                                Click="NextStepButton_Click"/>
+                        <Button Content="Xem trước" Width="120" Height="40"
+                                Background="#2196F3" Foreground="White"
+                                Padding="15,8" Margin="0,0,20,0"
+                                FontSize="14" FontWeight="SemiBold"
+                                Click="PreviewButton_Click"/>
+                        <Button Content="Đăng ngay" Width="120" Height="40"
+                                Background="#4CAF50" Foreground="White"
+                                Padding="15,8" FontSize="14" FontWeight="SemiBold"
+                                Click="PostButton_Click"/> 
                     </StackPanel>
                 </StackPanel>
 

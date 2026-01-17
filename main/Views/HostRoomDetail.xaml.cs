@@ -51,7 +51,7 @@ namespace main.Views
                 // Set room type
                 foreach (ComboBoxItem item in cmbEditRoomType.Items)
                 {
-                    if (item.Content.ToString() == _property.RoomType)
+                    if (item.Content.ToString() == _property.PropertyType)
                     {
                         cmbEditRoomType.SelectedItem = item;
                         break;
@@ -101,7 +101,7 @@ namespace main.Views
                 _property.Price = ulong.Parse(txtEditPrice.Text);
                 _property.Deposit = ulong.Parse(txtEditDeposit.Text);
                 _property.Description = txtEditDescription.Text;
-                _property.RoomType = (cmbEditRoomType.SelectedItem as ComboBoxItem)?.Content.ToString();
+                _property.PropertyType = (cmbEditRoomType.SelectedItem as ComboBoxItem)?.Content.ToString();
                 _property.Status = cmbEditStatus.SelectedIndex == 0 ? "Available" :
                                  cmbEditStatus.SelectedIndex == 1 ? "Rented" : "Maintenance";
 

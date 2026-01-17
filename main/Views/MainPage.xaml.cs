@@ -53,5 +53,6 @@ namespace main.Views
             e.Handled = true;
             _mainWindow.NavigateToRoomList(city);
         }
+
     }
 }

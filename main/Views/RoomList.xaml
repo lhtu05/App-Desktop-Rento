@@ -149,7 +149,7 @@
                                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                                         <TextBlock Text="{Binding Area, StringFormat='{}{0}m²'}" 
                                                                   Foreground="#666" Margin="0,0,20,0"/>
-                                                        <TextBlock Text="{Binding RoomType}" 
+                                                        <TextBlock Text="{Binding PropertyType}" 
                                                                   Foreground="#666" Margin="0,0,20,0"/>
                                                         <TextBlock Text="{Binding Capacity, StringFormat='Tối đa {0} người'}" 
                                                                   Foreground="#666"/>
